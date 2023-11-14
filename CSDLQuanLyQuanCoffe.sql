@@ -1,7 +1,7 @@
-﻿CREATE DATABASE QuanLyQuanCafe
+﻿CREATE DATABASE QLCoffeLTTQ
 GO
 
-USE QuanLyQuanCafe
+USE QLCoffeLTTQ
 GO
 
 -- Food
@@ -76,8 +76,8 @@ INSERT INTO dbo.Account
           PassWord ,
           Type
         )
-VALUES  ( N'K9' , -- UserName - nvarchar(100)
-          N'RongK9' , -- DisplayName - nvarchar(100)
+VALUES  ( N'Chinh' , -- UserName - nvarchar(100)
+          N'DucChinh' , -- DisplayName - nvarchar(100)
           N'1' , -- PassWord - nvarchar(1000)
           1  -- Type - int
         )
@@ -94,15 +94,14 @@ VALUES  ( N'staff' , -- UserName - nvarchar(100)
         )
 GO
 
-CREATE PROC USP_GetAccountByUserName
-@userName nvarchar(100)
+CREATE or alter PROC USP_GetAccountByUserName @userName nvarchar(100)
 AS 
 BEGIN
 	SELECT * FROM dbo.Account WHERE UserName = @userName
 END
 GO
 
-EXEC dbo.USP_GetAccountByUserName @userName = N'k9' -- nvarchar(100)
+EXEC dbo.USP_GetAccountByUserName @userName = N'Chinh' -- nvarchar(100)
 
 GO
 
@@ -136,20 +135,18 @@ GO
 -- thêm category
 INSERT dbo.FoodCategory
         ( name )
-VALUES  ( N'Hải sản'  -- name - nvarchar(100)
+VALUES  ( N'Cà phê'  -- name - nvarchar(100)
           )
 INSERT dbo.FoodCategory
         ( name )
-VALUES  ( N'Nông sản' )
+VALUES  ( N'Nước ép' )
 INSERT dbo.FoodCategory
         ( name )
-VALUES  ( N'Lâm sản' )
+VALUES  ( N'Sinh tố' )
 INSERT dbo.FoodCategory
         ( name )
-VALUES  ( N'Sản sản' )
-INSERT dbo.FoodCategory
-        ( name )
-VALUES  ( N'Nước' )
+VALUES  ( N'Đồ ăn' )
+
 
 -- thêm món ăn
 INSERT dbo.Food
