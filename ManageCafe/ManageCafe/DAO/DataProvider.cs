@@ -19,7 +19,6 @@ namespace ManageCafe.DAO
 		private DataProvider() { }
 		private string connectionStr = "Data Source = NQT;Initial Catalog = QLCoffeLTTQ;Integrated Security=True";
 
-
 		public DataTable ExecuteQuery(string query, object[] parameter =null) //Doc DL
 		{
 			DataTable data = new DataTable();

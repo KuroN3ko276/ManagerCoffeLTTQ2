@@ -31,6 +31,36 @@ namespace ManageCafe
         private void adminToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fAdmin f = new fAdmin();
+            //f.ShowDialog();
+        }
+
+        private void doanhThuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Admin.fDoanhThu f = new Admin.fDoanhThu();
+            f.ShowDialog();
+        }
+
+        private void thứcĂnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Admin.fFood f = new Admin.fFood();
+            f.ShowDialog();
+        }
+
+        private void danhMụcToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Admin.fDanhMuc f = new Admin.fDanhMuc();
+            f.ShowDialog();
+        }
+
+        private void bànĂnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Admin.fBanAn f = new Admin.fBanAn();
+            f.ShowDialog();
+        }
+
+        private void tàiKhoảnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Admin.fTaiKhoan f = new Admin.fTaiKhoan();
             f.ShowDialog();
         }
     }
