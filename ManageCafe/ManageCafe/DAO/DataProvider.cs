@@ -11,6 +11,7 @@ namespace ManageCafe.DAO
 	public class DataProvider
 	{
 		private string connectionStr = "Data Source=KURON3KO\\HAIDANG;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";
+		private string connectionStr = "Data Source=CAU-CHINH\\SQLEXPRESS;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";
 
 
 		public DataTable ExecuteQuery(string query, object[] parameter =null)
