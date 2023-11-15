@@ -10,10 +10,17 @@ namespace ManageCafe.DAO
 {
 	public class DataProvider
 	{
-		private string connectionStr = "Data Source=KURON3KO\\HAIDANG;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";
+		private static DataProvider instance; // Ctrl + R + E
+		public static DataProvider Instance
+		{
+			get { if (instance == null) instance = new DataProvider(); return DataProvider.instance; }
+			private set { DataProvider.instance = value; }
+		}
+		private DataProvider() { }
+		private string connectionStr = "Data Source = NQT;Initial Catalog = QLCoffeLTTQ;Integrated Security=True";
 
 
-		public DataTable ExecuteQuery(string query, object[] parameter =null)
+		public DataTable ExecuteQuery(string query, object[] parameter =null) //Doc DL
 		{
 			DataTable data = new DataTable();
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -47,7 +54,7 @@ namespace ManageCafe.DAO
 			return data;
 		}
 
-		public int ExecuteNonQuery(string query, object[] parameter = null)
+		public int ExecuteNonQuery(string query, object[] parameter = null)// Thong bao co bao nhieu thay doi trong database
 		{
 			int data = 0;
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -79,7 +86,7 @@ namespace ManageCafe.DAO
 			return data;
 		}
 
-		public object ExecuteScalar(string query, object[] parameter = null)
+		public object ExecuteScalar(string query, object[] parameter = null)//TRa ve 1 row
 		{
 			object data = 0;
 			using (SqlConnection connection = new SqlConnection(connectionStr))
