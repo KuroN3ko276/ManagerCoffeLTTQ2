@@ -13,19 +13,16 @@ namespace ManageCafe.DAO
 
 		public static Account Instance
 		{
-			get { if (instance == null) instance = new Account(); return instance; }
-			private set { instance = value; }
+			get { if (instance == null) instance = new Account(); return Account.instance; }
+			private set { Account.instance = value; }
 		}
 
-		private Account()
-		{
-			
-		}
+		private Account() { }
 
 		public bool Login(string username, string password)
 		{
-			string query = "select * from dbo.Account where Username='Chinh' and Password='1' ";
-			DataTable result = DataProvider.Instance.ExecuteQuery(query);
+			string query = "USP_Login @username , @password ";
+			DataTable result = DataProvider.Instance.ExecuteQuery(query, new object[]{ username,password});
 			return result.Rows.Count > 0; ;
 		}
 	}
