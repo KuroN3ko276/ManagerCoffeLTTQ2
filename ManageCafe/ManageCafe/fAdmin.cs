@@ -23,9 +23,9 @@ namespace ManageCafe
         {
             string query = "EXEC dbo.USP_GetAccountByUserName @userName";
 
-            DataProvider provider = new DataProvider();
+            
 
-            dtgvAccount.DataSource = provider.ExecuteQuery(query, new object[] {"staff"});
+            dtgvAccount.DataSource =DataProvider.Instance.ExecuteQuery(query, new object[] {"staff"});
 
         }
 

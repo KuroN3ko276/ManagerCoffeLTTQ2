@@ -10,7 +10,16 @@ namespace ManageCafe.DAO
 {
 	public class DataProvider
 	{
-		private string connectionStr = "Data Source=CAU-CHINH\\SQLEXPRESS;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";		
+		private static DataProvider instance;
+		public static DataProvider Instance
+		{
+			get { if (instance == null) instance = new DataProvider();return DataProvider.instance; }
+			private set { DataProvider.instance = value; }
+		}
+		private DataProvider() { }
+
+
+		private string connectionStr = "Data Source=MYPC;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";		
 
 		public DataTable ExecuteQuery(string query, object[] parameter =null)
 		{
