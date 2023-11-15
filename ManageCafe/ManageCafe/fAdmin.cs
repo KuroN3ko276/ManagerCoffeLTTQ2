@@ -16,6 +16,7 @@ namespace ManageCafe
         public fAdmin()
         {
             InitializeComponent();
+<<<<<<< Updated upstream
             LoadDateTimePickerBill();
 			LoadAccountList();
             LoadBillList(dtpkFromDate.Value, dtpkToDate.Value);
@@ -110,6 +111,10 @@ namespace ManageCafe
 			txtCategoryID.Text = dtgvCategory.CurrentRow.Cells[0].Value.ToString();
 			txtCategoryName.Text = dtgvCategory.CurrentRow.Cells[1].Value.ToString();
 		}
+=======
+        }
+
+>>>>>>> Stashed changes
 
 		private void btnDeleteCategory_Click(object sender, EventArgs e)
 		{

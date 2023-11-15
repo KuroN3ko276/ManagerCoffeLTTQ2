@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ManageCafe.DAO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,16 @@ namespace ManageCafe.Admin
         public fTaiKhoan()
         {
             InitializeComponent();
+			LoadAccountList();
         }
-    }
+
+		void LoadAccountList()
+		{
+			string query = "EXEC dbo.USP_GetAccountByUserName @userName";
+
+
+			dtgvAccount.DataSource = DataProvider.Instance.ExecuteQuery(query, new object[] { "staff" });
+
+		}
+	}
 }

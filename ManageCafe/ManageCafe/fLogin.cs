@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ManageCafe.DAO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,12 +18,28 @@ namespace ManageCafe
             InitializeComponent();
         }
 
+        bool Login(string username, string password)
+        {
+
+            return Account.Instance.Login(username,password);
+        }
+
+
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            fTableManage f = new fTableManage();
-            this.Hide();
-            f.ShowDialog();
-            this.Show();
+            string username= txtUserName.Text;
+            string password= txtPassword.Text;
+            if(Login(username,password))
+            {
+				fTableManage f = new fTableManage();
+				this.Hide();
+				f.ShowDialog();
+				this.Show();
+			}
+            else
+            {
+                MessageBox.Show("Sai tài khoản hoặc mật khẩu");
+            }
         }
 
         private void btnExit_Click(object sender, EventArgs e)

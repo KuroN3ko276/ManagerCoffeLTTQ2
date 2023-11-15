@@ -76,6 +76,7 @@
     <Compile Include="Admin\fTaiKhoan.Designer.cs">
       <DependentUpon>fTaiKhoan.cs</DependentUpon>
     </Compile>
+    <Compile Include="DAO\Account.cs" />
     <Compile Include="DAO\DataProvider.cs" />
     <Compile Include="fAccountProfile.cs">
       <SubType>Form</SubType>
@@ -137,8 +138,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DTO\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
