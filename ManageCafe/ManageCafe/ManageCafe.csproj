@@ -46,6 +46,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\fBanAn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\fBanAn.Designer.cs">
+      <DependentUpon>fBanAn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\fDanhMuc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\fDanhMuc.Designer.cs">
+      <DependentUpon>fDanhMuc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\fDoanhThu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\fDoanhThu.Designer.cs">
+      <DependentUpon>fDoanhThu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\fFood.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\fFood.Designer.cs">
+      <DependentUpon>fFood.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\fTaiKhoan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\fTaiKhoan.Designer.cs">
+      <DependentUpon>fTaiKhoan.cs</DependentUpon>
+    </Compile>
     <Compile Include="DAO\DataProvider.cs" />
     <Compile Include="fAccountProfile.cs">
       <SubType>Form</SubType>
