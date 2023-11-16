@@ -31,7 +31,7 @@ namespace ManageCafe
         private void adminToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fAdmin f = new fAdmin();
-            //f.ShowDialog();
+            f.ShowDialog();
         }
 
         private void doanhThuToolStripMenuItem_Click(object sender, EventArgs e)
