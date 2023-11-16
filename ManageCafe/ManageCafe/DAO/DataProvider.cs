@@ -10,16 +10,7 @@ namespace ManageCafe.DAO
 {
 	public class DataProvider
 	{
-<<<<<<< Updated upstream
-		private static DataProvider instance; // Ctrl + R + E
-		public static DataProvider Instance
-		{
-			get { if (instance == null) instance = new DataProvider(); return DataProvider.instance; }
-			private set { DataProvider.instance = value; }
-		}
-		private DataProvider() { }
-		private string connectionStr = "Data Source = NQT;Initial Catalog = QLCoffeLTTQ;Integrated Security=True";
-=======
+
 		private static DataProvider instance;
 
 		private string connectionStr = "Data Source=KURON3KO\\HAIDANG;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";
@@ -34,7 +25,6 @@ namespace ManageCafe.DAO
 		{
 
 		}
->>>>>>> Stashed changes
 
 		public DataTable ExecuteQuery(string query, object[] parameter =null) //Doc DL
 		{
