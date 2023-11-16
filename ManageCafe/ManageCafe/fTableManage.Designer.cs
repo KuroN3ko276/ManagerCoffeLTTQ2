@@ -268,6 +268,7 @@
 			this.btnCheckOut.TabIndex = 3;
 			this.btnCheckOut.Text = "Thanh toán";
 			this.btnCheckOut.UseVisualStyleBackColor = true;
+			this.btnCheckOut.Click += new System.EventHandler(this.btnCheckOut_Click);
 			// 
 			// panel4
 			// 
@@ -306,6 +307,7 @@
 			this.btnAddFood.TabIndex = 2;
 			this.btnAddFood.Text = "Thêm món";
 			this.btnAddFood.UseVisualStyleBackColor = true;
+			this.btnAddFood.Click += new System.EventHandler(this.btnAddFood_Click);
 			// 
 			// cbFood
 			// 
@@ -322,6 +324,7 @@
 			this.cbCategory.Name = "cbCategory";
 			this.cbCategory.Size = new System.Drawing.Size(232, 27);
 			this.cbCategory.TabIndex = 0;
+			this.cbCategory.SelectedIndexChanged += new System.EventHandler(this.cbCategory_SelectedIndexChanged);
 			// 
 			// flpTable
 			// 

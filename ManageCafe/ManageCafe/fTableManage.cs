@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace ManageCafe
 {
@@ -20,11 +21,13 @@ namespace ManageCafe
         {
             InitializeComponent();
 			LoadTable();
+			LoadCategory();
 		}
 
 		#region Methods
 		void LoadTable() 
 		{
+			flpTable.Controls.Clear();
 			List<Table> tableList = TableDAO.Instance.LoadTableList();
 			foreach (Table table in tableList)
 			{
@@ -63,7 +66,23 @@ namespace ManageCafe
 			}
 			CultureInfo cultureInfo = new CultureInfo("vi-VN");
 			txbTotalPrice.Text = totalPrice.ToString("c",cultureInfo);
+
 		}
+
+		void LoadCategory()	//Load loại đồ ăn
+		{
+			List<Category> listCategory = CategoryDAO.Instance.GetListCategory();
+			cbCategory.DataSource = listCategory;
+			cbCategory.DisplayMember = "Name";
+		}
+
+		void LoadFoodListByCategoryID(int id) //Load đồ ăn theo loại 
+		{
+			List<Food> listFood = FoodDAO.Instance.GetListFoodByBategoryID(id);
+			cbFood.DataSource = listFood;
+			cbFood.DisplayMember = "Name";
+		}
+
 		#endregion
 
 		#region Events
@@ -71,6 +90,7 @@ namespace ManageCafe
 		private void Btn_TableClick(object sender, EventArgs e)
 		{
 			int tableID = ((sender as Button).Tag as Table).ID;
+			lsvBill.Tag = (sender as Button).Tag;
 			showBill(tableID);
 		}
 
@@ -121,8 +141,57 @@ namespace ManageCafe
 			f.ShowDialog();
 		}
 
+		private void cbCategory_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			int id = 0;
 
+			ComboBox cb = sender as ComboBox;
+
+			if (cb.SelectedIndex == null) return;
+
+			Category selected = cb.SelectedItem as Category;
+			id = selected.ID;
+			LoadFoodListByCategoryID(id);
+		}
+
+		private void btnAddFood_Click(object sender, EventArgs e)
+		{
+			Table table = lsvBill.Tag as Table;
+
+			int idBill = BillDAO.Instance.GetBillIDByTableID(table.ID);
+			int foodID = (cbFood.SelectedItem as Food).ID;
+			int count = (int)nmFoodCount.Value;
+
+			if (idBill == -1)
+			{
+				BillDAO.Instance.InsertBill(table.ID);
+				BillInfoDAO.Instance.InsertBillInfo(BillDAO.Instance.GetMaxIDBill(),foodID,count);
+			}
+			else
+			{
+				BillInfoDAO.Instance.InsertBillInfo(idBill, foodID, count);
+			}
+			showBill(table.ID);
+			LoadTable();
+		}
+		private void btnCheckOut_Click(object sender, EventArgs e)
+		{
+			Table table = lsvBill.Tag as Table;
+			int idBill = BillDAO.Instance.GetBillIDByTableID(table.ID);
+
+			if(idBill != -1)
+			{
+				if(MessageBox.Show("Bạn có muốn thanh toán hóa đơn cho bàn "+table.Name +"?","Thông báo",MessageBoxButtons.OKCancel) == DialogResult.OK)
+				{
+					BillDAO.Instance.CheckOut(idBill);
+					showBill(table.ID);
+					LoadTable();
+				}
+			}
+
+		}
 		#endregion
 
+		
 	}
 }

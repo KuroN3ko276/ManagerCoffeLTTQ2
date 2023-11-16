@@ -31,5 +31,29 @@ namespace ManageCafe.DAO
 			}
 			return -1;
 		}
+
+		public void InsertBill(int idTable)		//thêm bill theo idTable
+		{
+			DataProvider.Instance.ExecuteNonQuery("exec USP_InsertBill @idTable",new object[] {idTable});
+		}
+
+		public int GetMaxIDBill()
+		{
+			try
+			{
+				return (int)DataProvider.Instance.ExecuteScalar("SELECT MAX(id) FROM dbo.Bill");
+			}
+			catch
+			{
+				return 1;
+			}
+			
+		}
+
+		public void CheckOut(int id)
+		{
+			string query = "Update dbo.Bill Set status = 1,DateCheckOut = GETDATE() where id =  "+id;
+			DataProvider.Instance.ExecuteNonQuery(query);
+		}
 	}
 }
