@@ -100,13 +100,14 @@ namespace ManageCafe
 			double totalPrice = Convert.ToDouble(txbTotalPrice.Text.Split(',')[0].Replace(".", ""));
 			double finalTotalPrice = totalPrice - (totalPrice / 100) * discount;
 
+			SaveFileDialog file = new SaveFileDialog();
 			Excel.Application exApp = new Excel.Application();
 			Excel.Workbook exBook = exApp.Workbooks.Add(Excel.XlWBATemplate.xlWBATWorksheet);
 			Excel.Worksheet exSheet = (Excel.Worksheet)exBook.Worksheets[1];
 			Excel.Range tenTruong = (Excel.Range)exSheet.Cells[1, 1]; //Đưa con trỏ vào ô A1
 																	  //Đưa dữ liệu vào file Excel
 
-			string query= "select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice from bill join BillInfo on bill.id=BillInfo.idBill join TableFood on TableFood.id=Bill.idTable join food on Food.id=BillInfo.idFood where tablefood.id="+table.ID+" and Bill.status = 0";
+			string query= "select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice,TableFood.id as idtable from bill join BillInfo on bill.id=BillInfo.idBill join TableFood on TableFood.id=Bill.idTable join food on Food.id=BillInfo.idFood where tablefood.id="+table.ID+" and Bill.status = 0";
 			DataTable data = DataProvider.Instance.ExecuteQuery(query);
 			tenTruong.Range["A1:D1"].MergeCells = true;
 			tenTruong.Range["A1"].Value = "CẬU CHÍNH COFFEE";
@@ -135,11 +136,10 @@ namespace ManageCafe
 				tenTruong.Range["F" + hang.ToString()].Value = data.Rows[i]["totalprice"];
 
 			}
-			tenTruong.Range["C" + (hang + 1).ToString()].Value = "Giảm giá: " + discount;
+			tenTruong.Range["D" + (hang + 1).ToString()].Value = "Giảm giá: " + discount;
 			tenTruong.Range["C" + (hang + 2).ToString()].Value = "Tổng tiền: " + finalTotalPrice;
-			
-			exSheet.Name = idBill.ToString();
-			SaveFileDialog file = new SaveFileDialog();
+
+			exSheet.Name = "HoaDonBan";
 			exBook.Activate();
 			if (file.ShowDialog() == DialogResult.OK)
 				exBook.SaveAs(file.FileName.ToString());
