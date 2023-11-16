@@ -90,6 +90,62 @@ namespace ManageCafe
 			cb.DataSource = TableDAO.Instance.LoadTableList();
 			cb.DisplayMember = "Name";
 		}
+
+		void ExportFileExcel()
+		{
+			Table table = lsvBill.Tag as Table;
+			int idBill = BillDAO.Instance.GetBillIDByTableID(table.ID);
+			int discount = (int)nmDiscount.Value;
+
+			double totalPrice = Convert.ToDouble(txbTotalPrice.Text.Split(',')[0].Replace(".", ""));
+			double finalTotalPrice = totalPrice - (totalPrice / 100) * discount;
+
+			SaveFileDialog file = new SaveFileDialog();
+			Excel.Application exApp = new Excel.Application();
+			Excel.Workbook exBook = exApp.Workbooks.Add(Excel.XlWBATemplate.xlWBATWorksheet);
+			Excel.Worksheet exSheet = (Excel.Worksheet)exBook.Worksheets[1];
+			Excel.Range tenTruong = (Excel.Range)exSheet.Cells[1, 1]; //Đưa con trỏ vào ô A1
+																	  //Đưa dữ liệu vào file Excel
+
+			string query= "select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice,TableFood.id as idtable from bill join BillInfo on bill.id=BillInfo.idBill join TableFood on TableFood.id=Bill.idTable join food on Food.id=BillInfo.idFood where tablefood.id="+table.ID+" and Bill.status = 0";
+			DataTable data = DataProvider.Instance.ExecuteQuery(query);
+			tenTruong.Range["A1:D1"].MergeCells = true;
+			tenTruong.Range["A1"].Value = "CẬU CHÍNH COFFEE";
+			tenTruong.Range["A2"].Value = "Địa chỉ: Cầu Giấy - Hà Nội";
+			tenTruong.Range["A3"].Value = "Điện thoại: 088888888";
+			tenTruong.Range["c5:f5"].MergeCells = true;
+			tenTruong.Range["C5:F5"].Font.Size = 18;
+			tenTruong.Range["C5:F5"].Font.Color = System.Drawing.Color.Red;
+			tenTruong.Range["C5"].Value = "HÓA ĐƠN BÁN";
+			tenTruong.Range["A7"].Value = "Mã HĐ: " + idBill;
+			tenTruong.Range["A8"].Value = "Tên bàn: " + table.Name;
+			tenTruong.Range["B10"].Value = "Mã Hàng ";
+			tenTruong.Range["C10"].Value = "Tên hàng ";
+			tenTruong.Range["D10"].Value = "Số lượng ";
+			tenTruong.Range["E10"].Value = "Đơn giá bán ";
+			tenTruong.Range["F10"].Value = "Thành tiền ";
+			int hang = 10;
+			for (int i = 0; i < data.Rows.Count; i++)
+			{
+				hang++;
+				tenTruong.Range["A" + hang.ToString()].Value = (i + 1).ToString();
+				tenTruong.Range["B" + hang.ToString()].Value = data.Rows[i]["idfood"];
+				tenTruong.Range["C" + hang.ToString()].Value = data.Rows[i]["name"];
+				tenTruong.Range["D" + hang.ToString()].Value = data.Rows[i]["count"];
+				tenTruong.Range["E" + hang.ToString()].Value = data.Rows[i]["price"];
+				tenTruong.Range["F" + hang.ToString()].Value = data.Rows[i]["totalprice"];
+
+			}
+			tenTruong.Range["D" + (hang + 1).ToString()].Value = "Giảm giá: " + discount;
+			tenTruong.Range["C" + (hang + 2).ToString()].Value = "Tổng tiền: " + finalTotalPrice;
+
+			exSheet.Name = "HoaDonBan";
+			exBook.Activate();
+			if (file.ShowDialog() == DialogResult.OK)
+				exBook.SaveAs(file.FileName.ToString());
+			exApp.Quit();
+
+		}
 		#endregion
 
 		#region Events
@@ -194,10 +250,11 @@ namespace ManageCafe
 			{
 				if(MessageBox.Show(string.Format("Bạn có chắc thanh toán hóa đơn cho bàn {0}\nTổng tiền - (Tổng tiền / 100) x Giảm giá\n=> {1} - ({1} / 100) x {2} = {3}", table.Name, totalPrice, discount, finalTotalPrice),"Thông báo",MessageBoxButtons.OKCancel) == DialogResult.OK)
 				{
-
-					BillDAO.Instance.CheckOut(idBill,discount);
+					ExportFileExcel();
+					BillDAO.Instance.CheckOut(idBill,discount,(float)finalTotalPrice);
 					showBill(table.ID);
 					LoadTable();
+
 				}
 			}
 

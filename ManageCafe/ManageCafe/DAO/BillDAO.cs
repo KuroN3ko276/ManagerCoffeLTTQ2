@@ -50,9 +50,9 @@ namespace ManageCafe.DAO
 			
 		}
 
-		public void CheckOut(int id, int discount)
+		public void CheckOut(int id, int discount, float totalPrice)
 		{
-			string query = "Update dbo.Bill Set status = 1,DateCheckOut = GETDATE(), discount = "+discount+" where id =  "+id;
+			string query = "Update dbo.Bill Set status = 1,DateCheckOut = GETDATE(), discount = "+discount+",totalPrice ="+totalPrice+" where id =  "+id;
 			DataProvider.Instance.ExecuteNonQuery(query);
 		}
 	}
