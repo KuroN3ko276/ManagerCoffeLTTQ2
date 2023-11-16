@@ -52,7 +52,7 @@ CREATE TABLE Bill
 	DateCheckIn DATE NOT NULL DEFAULT GETDATE(),
 	DateCheckOut DATE,
 	idTable INT NOT NULL,
-	discount INT,
+	discount int,
 	totalPrice FLOAT,
 	status INT NOT NULL DEFAULT 0 -- 1: đã thanh toán && 0: chưa thanh toán
 	
@@ -307,12 +307,6 @@ BEGIN
 	END
 END
 GO
-select * from bill
-select * from BillInfo
-select * from TableFood
-DELETE dbo.BillInfo
-
-DELETE dbo.Bill
 
 CREATE TRIGGER UTG_UpdateBillInfo
 ON dbo.BillInfo FOR INSERT, UPDATE
@@ -550,3 +544,14 @@ BEGIN
 	AND t.id = b.idTable
 END
 GO
+
+select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice,TableFood.id as idtable
+from bill join BillInfo on bill.id=BillInfo.idBill
+	join TableFood on TableFood.id=Bill.idTable
+	join food on Food.id=BillInfo.idFood
+where TableFood.id=4 and Bill.status = 0
+
+select * from bill join BillInfo on bill.id=BillInfo.idBill where status=0
+
+select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice from bill join BillInfo on bill.id=BillInfo.idBill join TableFood on TableFood.id=Bill.idTable join food on Food.id=BillInfo.idFood where tablefood.id=4 and Bill.status = 0
+select * from bill join TableFood on bill.idTable=TableFood.id where bill.status=0
