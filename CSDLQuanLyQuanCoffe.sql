@@ -52,6 +52,8 @@ CREATE TABLE Bill
 	DateCheckIn DATE NOT NULL DEFAULT GETDATE(),
 	DateCheckOut DATE,
 	idTable INT NOT NULL,
+	discount INT,
+	totalPrice FLOAT,
 	status INT NOT NULL DEFAULT 0 -- 1: đã thanh toán && 0: chưa thanh toán
 	
 	FOREIGN KEY (idTable) REFERENCES dbo.TableFood(id)
@@ -68,6 +70,14 @@ CREATE TABLE BillInfo
 	FOREIGN KEY (idBill) REFERENCES dbo.Bill(id),
 	FOREIGN KEY (idFood) REFERENCES dbo.Food(id)
 )
+GO
+ALTER TABLE dbo.Bill ADD totalPrice FLOAT
+
+
+ALTER TABLE dbo.Bill
+ADD discount INT
+
+UPDATE dbo.Bill SET discount = 0
 GO
 
 INSERT INTO dbo.Account
@@ -105,8 +115,7 @@ EXEC dbo.USP_GetAccountByUserName @userName = N'Chinh' -- nvarchar(100)
 
 GO
 
-CREATE PROC USP_Login
-@userName nvarchar(100), @passWord nvarchar(100)
+CREATE PROC USP_Login @userName nvarchar(100), @passWord nvarchar(100)
 AS
 BEGIN
 	SELECT * FROM dbo.Account WHERE UserName = @userName AND PassWord = @passWord
@@ -151,27 +160,27 @@ VALUES  ( N'Đồ ăn' )
 -- thêm món ăn
 INSERT dbo.Food
         ( name, idCategory, price )
-VALUES  ( N'Mực một nắng nước sa tế', -- name - nvarchar(100)
+VALUES  ( N'Cà phê sữa đá', -- name - nvarchar(100)
           1, -- idCategory - int
-          120000)
+          40000)
 INSERT dbo.Food
         ( name, idCategory, price )
-VALUES  ( N'Nghêu hấp xả', 1, 50000)
+VALUES  ( N'Cà phê đen', 1, 35000)
 INSERT dbo.Food
         ( name, idCategory, price )
-VALUES  ( N'Dú dê nướng sữa', 2, 60000)
+VALUES  ( N'Nước ép cam', 2, 60000)
 INSERT dbo.Food
         ( name, idCategory, price )
-VALUES  ( N'Heo rừng nướng muối ớt', 3, 75000)
+VALUES  ( N'Nước ép táo', 2, 60000)
 INSERT dbo.Food
         ( name, idCategory, price )
-VALUES  ( N'Cơm chiên mushi', 4, 999999)
+VALUES  ( N'Sinh tố xoài', 3, 55000)
 INSERT dbo.Food
         ( name, idCategory, price )
-VALUES  ( N'7Up', 5, 15000)
+VALUES  ( N'Sinh tố mãng cầu', 3, 55000)
 INSERT dbo.Food
         ( name, idCategory, price )
-VALUES  ( N'Cafe', 5, 12000)
+VALUES  ( N'Hướng dương', 4, 12000)
 
 -- thêm bill
 INSERT	dbo.Bill
@@ -209,44 +218,38 @@ VALUES  ( GETDATE() , -- DateCheckIn - date
           1  -- status - int
         )
 
+select * from food
 -- thêm bill info
 INSERT	dbo.BillInfo
         ( idBill, idFood, count )
-VALUES  ( 7, -- idBill - int
+VALUES  ( 1, -- idBill - int
           1, -- idFood - int
           2  -- count - int
           )
 INSERT	dbo.BillInfo
         ( idBill, idFood, count )
-VALUES  ( 5, -- idBill - int
+VALUES  ( 1, -- idBill - int
           3, -- idFood - int
           4  -- count - int
           )
 INSERT	dbo.BillInfo
         ( idBill, idFood, count )
-VALUES  ( 5, -- idBill - int
-          5, -- idFood - int
+VALUES  ( 2, -- idBill - int
+          6, -- idFood - int
           1  -- count - int
           )
 INSERT	dbo.BillInfo
         ( idBill, idFood, count )
-VALUES  ( 6, -- idBill - int
+VALUES  ( 2, -- idBill - int
           1, -- idFood - int
           2  -- count - int
           )
 INSERT	dbo.BillInfo
         ( idBill, idFood, count )
-VALUES  ( 6, -- idBill - int
+VALUES  ( 1, -- idBill - int
           6, -- idFood - int
           2  -- count - int
           )
-INSERT	dbo.BillInfo
-        ( idBill, idFood, count )
-VALUES  ( 7, -- idBill - int
-          5, -- idFood - int
-          2  -- count - int
-          )         
-          
 GO
 
 CREATE PROC USP_InsertBill
@@ -269,7 +272,8 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_InsertBillInfo
+
+CREATE or alter PROC USP_InsertBillInfo
 @idBill INT, @idFood INT, @count INT
 AS
 BEGIN
@@ -285,22 +289,27 @@ BEGIN
 	BEGIN
 		DECLARE @newCount INT = @foodCount + @count
 		IF (@newCount > 0)
-			UPDATE dbo.BillInfo	SET count = @foodCount + @count WHERE idFood = @idFood
+			UPDATE dbo.BillInfo	SET count = @foodCount + @count WHERE idFood = @idFood and idBill = @idBill
 		ELSE
 			DELETE dbo.BillInfo WHERE idBill = @idBill AND idFood = @idFood
 	END
 	ELSE
 	BEGIN
-		INSERT	dbo.BillInfo
+		IF(@count>0)
+		begin
+			INSERT	dbo.BillInfo
         ( idBill, idFood, count )
 		VALUES  ( @idBill, -- idBill - int
           @idFood, -- idFood - int
           @count  -- count - int
           )
+		end		
 	END
 END
 GO
-
+select * from bill
+select * from BillInfo
+select * from TableFood
 DELETE dbo.BillInfo
 
 DELETE dbo.Bill
@@ -362,13 +371,6 @@ BEGIN
 		UPDATE dbo.TableFood SET status = N'Trống' WHERE id = @idTable
 END
 GO
-
-ALTER TABLE dbo.Bill
-ADD discount INT
-
-UPDATE dbo.Bill SET discount = 0
-GO
-
 
 CREATE PROC USP_SwitchTabel
 @idTable1 INT, @idTable2 int
@@ -453,12 +455,6 @@ AS BEGIN
 END
 GO
 
-ALTER TABLE dbo.Bill ADD totalPrice FLOAT
-
-DELETE dbo.BillInfo
-DELETE dbo.Bill
-
-GO
 
 CREATE PROC USP_GetListBillByDate
 @checkIn date, @checkOut date

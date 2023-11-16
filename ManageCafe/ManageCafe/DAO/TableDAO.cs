@@ -39,5 +39,10 @@ namespace ManageCafe.DAO
 
 		}
 
+		public void SwitchTable(int id1, int id2)
+		{
+			DataProvider.Instance.ExecuteQuery("exec USP_SwitchTabel @idTable1 , @idTable2", new object[] { id1, id2 });
+		}
+
 	}
 }
