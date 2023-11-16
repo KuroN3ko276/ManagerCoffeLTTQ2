@@ -212,7 +212,7 @@ VALUES  ( GETDATE() , -- DateCheckIn - date
 -- thêm bill info
 INSERT	dbo.BillInfo
         ( idBill, idFood, count )
-VALUES  ( 5, -- idBill - int
+VALUES  ( 7, -- idBill - int
           1, -- idFood - int
           2  -- count - int
           )

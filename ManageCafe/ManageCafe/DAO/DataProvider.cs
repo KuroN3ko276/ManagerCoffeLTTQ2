@@ -11,6 +11,8 @@ namespace ManageCafe.DAO
 	public class DataProvider
 	{
 		private static DataProvider instance;
+
+		private string connectionStr = "Data Source=MYPC;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";
 		public static DataProvider Instance
 		{
 			get { if (instance == null) instance = new DataProvider();return DataProvider.instance; }
@@ -19,9 +21,9 @@ namespace ManageCafe.DAO
 		private DataProvider() { }
 
 
-		private string connectionStr = "Data Source=MYPC;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";		
+				
 
-		public DataTable ExecuteQuery(string query, object[] parameter =null)
+		public DataTable ExecuteQuery(string query, object[] parameter =null) //Doc DL
 		{
 			DataTable data = new DataTable();
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -55,7 +57,7 @@ namespace ManageCafe.DAO
 			return data;
 		}
 
-		public int ExecuteNonQuery(string query, object[] parameter = null)
+		public int ExecuteNonQuery(string query, object[] parameter = null)// Thong bao co bao nhieu thay doi trong database
 		{
 			int data = 0;
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -87,7 +89,7 @@ namespace ManageCafe.DAO
 			return data;
 		}
 
-		public object ExecuteScalar(string query, object[] parameter = null)
+		public object ExecuteScalar(string query, object[] parameter = null)//TRa ve 1 row
 		{
 			object data = 0;
 			using (SqlConnection connection = new SqlConnection(connectionStr))
