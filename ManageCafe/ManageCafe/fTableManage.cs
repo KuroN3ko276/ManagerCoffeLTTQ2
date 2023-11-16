@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -49,15 +51,18 @@ namespace ManageCafe
 		{
 			lsvBill.Items.Clear();
 			List<ManageCafe.DTO.Menu> listMenu = MenuDAO.Instance.GetListMenuByTable(id);
-			
+			float totalPrice = 0;
 			foreach(ManageCafe.DTO.Menu item in listMenu)
 			{
 				ListViewItem lsvItem = new ListViewItem(item.FoodName.ToString());
 				lsvItem.SubItems.Add(item.Count.ToString());
 				lsvItem.SubItems.Add(item.Price.ToString());
 				lsvItem.SubItems.Add(item.Totalprice.ToString());
+				totalPrice += item.Totalprice;
 				lsvBill.Items.Add(lsvItem);
 			}
+			CultureInfo cultureInfo = new CultureInfo("vi-VN");
+			txbTotalPrice.Text = totalPrice.ToString("c",cultureInfo);
 		}
 		#endregion
 
@@ -116,8 +121,8 @@ namespace ManageCafe
 			f.ShowDialog();
 		}
 
-		#endregion
 
+		#endregion
 
 	}
 }

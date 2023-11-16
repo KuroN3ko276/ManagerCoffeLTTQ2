@@ -536,7 +536,6 @@
 			this.btnDeleteCategory.TabIndex = 1;
 			this.btnDeleteCategory.Text = "Xoá";
 			this.btnDeleteCategory.UseVisualStyleBackColor = true;
-			this.btnDeleteCategory.Click += new System.EventHandler(this.btnDeleteCategory_Click);
 			// 
 			// btnAddCategory
 			// 
