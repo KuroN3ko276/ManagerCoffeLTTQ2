@@ -550,3 +550,6 @@ BEGIN
 	AND t.id = b.idTable
 END
 GO
+select * from TableFood
+select * from account
+select * from billinfo

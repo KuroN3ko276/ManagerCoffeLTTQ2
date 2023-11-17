@@ -97,7 +97,6 @@
 			this.panel26 = new System.Windows.Forms.Panel();
 			this.dtgvAccount = new System.Windows.Forms.DataGridView();
 			this.panel6 = new System.Windows.Forms.Panel();
-			this.btnResetPassword = new System.Windows.Forms.Button();
 			this.panel22 = new System.Windows.Forms.Panel();
 			this.nmTypeAccount = new System.Windows.Forms.NumericUpDown();
 			this.label11 = new System.Windows.Forms.Label();
@@ -172,10 +171,10 @@
 			this.tpBill.Controls.Add(this.panel2);
 			this.tpBill.Controls.Add(this.panel1);
 			this.tpBill.Controls.Add(this.tabControl2);
-			this.tpBill.Location = new System.Drawing.Point(4, 25);
+			this.tpBill.Location = new System.Drawing.Point(4, 28);
 			this.tpBill.Name = "tpBill";
 			this.tpBill.Padding = new System.Windows.Forms.Padding(3);
-			this.tpBill.Size = new System.Drawing.Size(868, 481);
+			this.tpBill.Size = new System.Drawing.Size(868, 478);
 			this.tpBill.TabIndex = 0;
 			this.tpBill.Text = "Doanh thu";
 			this.tpBill.UseVisualStyleBackColor = true;
@@ -205,14 +204,14 @@
 			// 
 			this.dtpkToDate.Location = new System.Drawing.Point(587, 8);
 			this.dtpkToDate.Name = "dtpkToDate";
-			this.dtpkToDate.Size = new System.Drawing.Size(200, 23);
+			this.dtpkToDate.Size = new System.Drawing.Size(200, 27);
 			this.dtpkToDate.TabIndex = 1;
 			// 
 			// dtpkFromDate
 			// 
 			this.dtpkFromDate.Location = new System.Drawing.Point(59, 8);
 			this.dtpkFromDate.Name = "dtpkFromDate";
-			this.dtpkFromDate.Size = new System.Drawing.Size(200, 23);
+			this.dtpkFromDate.Size = new System.Drawing.Size(200, 27);
 			this.dtpkFromDate.TabIndex = 0;
 			// 
 			// panel1
@@ -245,7 +244,7 @@
 			// 
 			// tabPage3
 			// 
-			this.tabPage3.Location = new System.Drawing.Point(4, 25);
+			this.tabPage3.Location = new System.Drawing.Point(4, 28);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage3.Size = new System.Drawing.Size(0, 0);
@@ -255,7 +254,7 @@
 			// 
 			// tabPage4
 			// 
-			this.tabPage4.Location = new System.Drawing.Point(4, 25);
+			this.tabPage4.Location = new System.Drawing.Point(4, 28);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage4.Size = new System.Drawing.Size(0, 0);
@@ -268,10 +267,10 @@
 			this.tpFood.Controls.Add(this.panel5);
 			this.tpFood.Controls.Add(this.panel4);
 			this.tpFood.Controls.Add(this.panel3);
-			this.tpFood.Location = new System.Drawing.Point(4, 25);
+			this.tpFood.Location = new System.Drawing.Point(4, 28);
 			this.tpFood.Name = "tpFood";
 			this.tpFood.Padding = new System.Windows.Forms.Padding(3);
-			this.tpFood.Size = new System.Drawing.Size(868, 481);
+			this.tpFood.Size = new System.Drawing.Size(868, 478);
 			this.tpFood.TabIndex = 1;
 			this.tpFood.Text = "Thức ăn";
 			this.tpFood.UseVisualStyleBackColor = true;
@@ -305,7 +304,7 @@
             0,
             0});
 			this.nmFoodPrice.Name = "nmFoodPrice";
-			this.nmFoodPrice.Size = new System.Drawing.Size(241, 23);
+			this.nmFoodPrice.Size = new System.Drawing.Size(241, 27);
 			this.nmFoodPrice.TabIndex = 1;
 			this.nmFoodPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
@@ -315,7 +314,7 @@
 			this.label4.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label4.Location = new System.Drawing.Point(3, 18);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(38, 19);
+			this.label4.Size = new System.Drawing.Size(48, 23);
 			this.label4.TabIndex = 0;
 			this.label4.Text = "Giá:";
 			// 
@@ -333,7 +332,7 @@
 			this.cbFoodCategory.FormattingEnabled = true;
 			this.cbFoodCategory.Location = new System.Drawing.Point(98, 14);
 			this.cbFoodCategory.Name = "cbFoodCategory";
-			this.cbFoodCategory.Size = new System.Drawing.Size(241, 24);
+			this.cbFoodCategory.Size = new System.Drawing.Size(241, 27);
 			this.cbFoodCategory.TabIndex = 1;
 			// 
 			// label3
@@ -342,7 +341,7 @@
 			this.label3.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label3.Location = new System.Drawing.Point(3, 18);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(81, 19);
+			this.label3.Size = new System.Drawing.Size(100, 23);
 			this.label3.TabIndex = 0;
 			this.label3.Text = "Danh mục:";
 			// 
@@ -360,7 +359,7 @@
 			this.txtFoodName.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.txtFoodName.Location = new System.Drawing.Point(98, 11);
 			this.txtFoodName.Name = "txtFoodName";
-			this.txtFoodName.Size = new System.Drawing.Size(241, 26);
+			this.txtFoodName.Size = new System.Drawing.Size(241, 30);
 			this.txtFoodName.TabIndex = 1;
 			// 
 			// label1
@@ -369,7 +368,7 @@
 			this.label1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.Location = new System.Drawing.Point(3, 18);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(72, 19);
+			this.label1.Size = new System.Drawing.Size(89, 23);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Tên món:";
 			// 
@@ -388,7 +387,7 @@
 			this.txtFoodID.Location = new System.Drawing.Point(98, 11);
 			this.txtFoodID.Name = "txtFoodID";
 			this.txtFoodID.ReadOnly = true;
-			this.txtFoodID.Size = new System.Drawing.Size(241, 26);
+			this.txtFoodID.Size = new System.Drawing.Size(241, 30);
 			this.txtFoodID.TabIndex = 1;
 			// 
 			// label2
@@ -397,7 +396,7 @@
 			this.label2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label2.Location = new System.Drawing.Point(3, 18);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(32, 19);
+			this.label2.Size = new System.Drawing.Size(38, 23);
 			this.label2.TabIndex = 0;
 			this.label2.Text = "ID:";
 			// 
@@ -476,10 +475,10 @@
 			this.tpFoodCategory.Controls.Add(this.flowLayoutPanel1);
 			this.tpFoodCategory.Controls.Add(this.panel11);
 			this.tpFoodCategory.Controls.Add(this.panel12);
-			this.tpFoodCategory.Location = new System.Drawing.Point(4, 25);
+			this.tpFoodCategory.Location = new System.Drawing.Point(4, 28);
 			this.tpFoodCategory.Name = "tpFoodCategory";
 			this.tpFoodCategory.Padding = new System.Windows.Forms.Padding(3);
-			this.tpFoodCategory.Size = new System.Drawing.Size(868, 481);
+			this.tpFoodCategory.Size = new System.Drawing.Size(868, 478);
 			this.tpFoodCategory.TabIndex = 2;
 			this.tpFoodCategory.Text = "Danh mục";
 			this.tpFoodCategory.UseVisualStyleBackColor = true;
@@ -577,7 +576,7 @@
 			this.txtCategoryName.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.txtCategoryName.Location = new System.Drawing.Point(142, 11);
 			this.txtCategoryName.Name = "txtCategoryName";
-			this.txtCategoryName.Size = new System.Drawing.Size(235, 26);
+			this.txtCategoryName.Size = new System.Drawing.Size(235, 30);
 			this.txtCategoryName.TabIndex = 1;
 			// 
 			// label7
@@ -586,7 +585,7 @@
 			this.label7.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label7.Location = new System.Drawing.Point(3, 18);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(107, 19);
+			this.label7.Size = new System.Drawing.Size(133, 23);
 			this.label7.TabIndex = 0;
 			this.label7.Text = "Tên danh mục:";
 			// 
@@ -605,7 +604,7 @@
 			this.txtCategoryID.Location = new System.Drawing.Point(142, 11);
 			this.txtCategoryID.Name = "txtCategoryID";
 			this.txtCategoryID.ReadOnly = true;
-			this.txtCategoryID.Size = new System.Drawing.Size(235, 26);
+			this.txtCategoryID.Size = new System.Drawing.Size(235, 30);
 			this.txtCategoryID.TabIndex = 1;
 			// 
 			// label8
@@ -614,7 +613,7 @@
 			this.label8.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label8.Location = new System.Drawing.Point(3, 18);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(32, 19);
+			this.label8.Size = new System.Drawing.Size(38, 23);
 			this.label8.TabIndex = 0;
 			this.label8.Text = "ID:";
 			// 
@@ -623,10 +622,10 @@
 			this.tpTable.Controls.Add(this.panel21);
 			this.tpTable.Controls.Add(this.panel13);
 			this.tpTable.Controls.Add(this.panel20);
-			this.tpTable.Location = new System.Drawing.Point(4, 25);
+			this.tpTable.Location = new System.Drawing.Point(4, 28);
 			this.tpTable.Name = "tpTable";
 			this.tpTable.Padding = new System.Windows.Forms.Padding(3);
-			this.tpTable.Size = new System.Drawing.Size(868, 481);
+			this.tpTable.Size = new System.Drawing.Size(868, 478);
 			this.tpTable.TabIndex = 3;
 			this.tpTable.Text = "Bàn ăn";
 			this.tpTable.UseVisualStyleBackColor = true;
@@ -677,7 +676,7 @@
             "Trống"});
 			this.cbTableStatus.Location = new System.Drawing.Point(124, 14);
 			this.cbTableStatus.Name = "cbTableStatus";
-			this.cbTableStatus.Size = new System.Drawing.Size(253, 24);
+			this.cbTableStatus.Size = new System.Drawing.Size(253, 27);
 			this.cbTableStatus.TabIndex = 1;
 			// 
 			// label6
@@ -686,7 +685,7 @@
 			this.label6.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label6.Location = new System.Drawing.Point(3, 18);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(82, 19);
+			this.label6.Size = new System.Drawing.Size(104, 23);
 			this.label6.TabIndex = 0;
 			this.label6.Text = "Trạng thái:";
 			// 
@@ -704,7 +703,7 @@
 			this.txtTableName.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.txtTableName.Location = new System.Drawing.Point(124, 11);
 			this.txtTableName.Name = "txtTableName";
-			this.txtTableName.Size = new System.Drawing.Size(253, 26);
+			this.txtTableName.Size = new System.Drawing.Size(253, 30);
 			this.txtTableName.TabIndex = 1;
 			// 
 			// label9
@@ -713,7 +712,7 @@
 			this.label9.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label9.Location = new System.Drawing.Point(3, 18);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(68, 19);
+			this.label9.Size = new System.Drawing.Size(84, 23);
 			this.label9.TabIndex = 0;
 			this.label9.Text = "Tên bàn:";
 			// 
@@ -732,7 +731,7 @@
 			this.txtTableID.Location = new System.Drawing.Point(124, 11);
 			this.txtTableID.Name = "txtTableID";
 			this.txtTableID.ReadOnly = true;
-			this.txtTableID.Size = new System.Drawing.Size(253, 26);
+			this.txtTableID.Size = new System.Drawing.Size(253, 30);
 			this.txtTableID.TabIndex = 1;
 			// 
 			// label10
@@ -741,7 +740,7 @@
 			this.label10.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label10.Location = new System.Drawing.Point(3, 18);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(32, 19);
+			this.label10.Size = new System.Drawing.Size(38, 23);
 			this.label10.TabIndex = 0;
 			this.label10.Text = "ID:";
 			// 
@@ -801,10 +800,10 @@
 			this.tpAccount.Controls.Add(this.panel26);
 			this.tpAccount.Controls.Add(this.panel6);
 			this.tpAccount.Controls.Add(this.panel25);
-			this.tpAccount.Location = new System.Drawing.Point(4, 25);
+			this.tpAccount.Location = new System.Drawing.Point(4, 28);
 			this.tpAccount.Name = "tpAccount";
 			this.tpAccount.Padding = new System.Windows.Forms.Padding(3);
-			this.tpAccount.Size = new System.Drawing.Size(868, 481);
+			this.tpAccount.Size = new System.Drawing.Size(868, 478);
 			this.tpAccount.TabIndex = 4;
 			this.tpAccount.Text = "Tài khoản";
 			this.tpAccount.UseVisualStyleBackColor = true;
@@ -830,7 +829,6 @@
 			// 
 			// panel6
 			// 
-			this.panel6.Controls.Add(this.btnResetPassword);
 			this.panel6.Controls.Add(this.panel22);
 			this.panel6.Controls.Add(this.panel23);
 			this.panel6.Controls.Add(this.panel24);
@@ -838,16 +836,6 @@
 			this.panel6.Name = "panel6";
 			this.panel6.Size = new System.Drawing.Size(386, 398);
 			this.panel6.TabIndex = 5;
-			// 
-			// btnResetPassword
-			// 
-			this.btnResetPassword.Location = new System.Drawing.Point(275, 221);
-			this.btnResetPassword.Name = "btnResetPassword";
-			this.btnResetPassword.Size = new System.Drawing.Size(91, 56);
-			this.btnResetPassword.TabIndex = 5;
-			this.btnResetPassword.Text = "Đặt lại mật khẩu";
-			this.btnResetPassword.UseVisualStyleBackColor = true;
-			this.btnResetPassword.Click += new System.EventHandler(this.btnResetPassword_Click);
 			// 
 			// panel22
 			// 
@@ -867,7 +855,7 @@
             0,
             0});
 			this.nmTypeAccount.Name = "nmTypeAccount";
-			this.nmTypeAccount.Size = new System.Drawing.Size(120, 23);
+			this.nmTypeAccount.Size = new System.Drawing.Size(120, 27);
 			this.nmTypeAccount.TabIndex = 1;
 			// 
 			// label11
@@ -876,7 +864,7 @@
 			this.label11.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label11.Location = new System.Drawing.Point(3, 18);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(110, 19);
+			this.label11.Size = new System.Drawing.Size(138, 23);
 			this.label11.TabIndex = 0;
 			this.label11.Text = "Loại tài khoản:";
 			// 
@@ -894,7 +882,7 @@
 			this.txtDisplayName.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.txtDisplayName.Location = new System.Drawing.Point(141, 11);
 			this.txtDisplayName.Name = "txtDisplayName";
-			this.txtDisplayName.Size = new System.Drawing.Size(236, 26);
+			this.txtDisplayName.Size = new System.Drawing.Size(236, 30);
 			this.txtDisplayName.TabIndex = 1;
 			// 
 			// label12
@@ -903,7 +891,7 @@
 			this.label12.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label12.Location = new System.Drawing.Point(3, 18);
 			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(93, 19);
+			this.label12.Size = new System.Drawing.Size(116, 23);
 			this.label12.TabIndex = 0;
 			this.label12.Text = "Tên hiển thị:";
 			// 
@@ -921,7 +909,8 @@
 			this.txtUsername.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.txtUsername.Location = new System.Drawing.Point(141, 11);
 			this.txtUsername.Name = "txtUsername";
-			this.txtUsername.Size = new System.Drawing.Size(236, 26);
+			this.txtUsername.ReadOnly = true;
+			this.txtUsername.Size = new System.Drawing.Size(236, 30);
 			this.txtUsername.TabIndex = 1;
 			// 
 			// label13
@@ -930,7 +919,7 @@
 			this.label13.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label13.Location = new System.Drawing.Point(3, 18);
 			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(106, 19);
+			this.label13.Size = new System.Drawing.Size(132, 23);
 			this.label13.TabIndex = 0;
 			this.label13.Text = "Tên tài khoản:";
 			// 
@@ -963,6 +952,7 @@
 			this.btnEditAccount.TabIndex = 2;
 			this.btnEditAccount.Text = "Sửa";
 			this.btnEditAccount.UseVisualStyleBackColor = true;
+			this.btnEditAccount.Click += new System.EventHandler(this.btnEditAccount_Click);
 			// 
 			// btnDeleteAccout
 			// 
@@ -986,7 +976,7 @@
 			// 
 			// fAdmin
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(900, 534);
 			this.Controls.Add(this.tcAdmin);
@@ -1122,7 +1112,6 @@
         private System.Windows.Forms.Panel panel26;
         private System.Windows.Forms.DataGridView dtgvAccount;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Button btnResetPassword;
         private System.Windows.Forms.Panel panel22;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Panel panel23;

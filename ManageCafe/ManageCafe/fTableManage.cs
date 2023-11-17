@@ -13,20 +13,40 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using static ManageCafe.fAccountProfile;
 
 namespace ManageCafe
 {
     public partial class fTableManage : Form
     {
-        public fTableManage()
+		private Account loginAccount;
+
+		public Account LoginAccount 
+		{
+			get { return loginAccount; }
+			set { loginAccount = value; changeAcccount(loginAccount.Type); }
+		}
+
+		public fTableManage(Account acc)
         {
             InitializeComponent();
+			
+			this.LoginAccount = acc;
+
 			LoadTable();
 			LoadCategory();
 			LoadComboboxTable(cbSwitchTable);
 		}
 
+
 		#region Methods
+		void changeAcccount(int type)
+		{
+			adminToolStripMenuItem.Enabled = type == 1;
+			thôngTinTàiKhoảnToolStripMenuItem.Text += " ("+LoginAccount.DisplayName+")";
+		}
+
+
 		void LoadTable() 
 		{
 			flpTable.Controls.Clear();
@@ -164,14 +184,21 @@ namespace ManageCafe
 
 		private void thôngTinCáNhânToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			fAccountProfile f = new fAccountProfile();
+			fAccountProfile f = new fAccountProfile(LoginAccount);
+			f.UpdateAccount += F_UpdateAccount;
 			f.ShowDialog();
+		}
+
+		private void F_UpdateAccount(object sender, AccountEvent e)
+		{
+			thôngTinTàiKhoảnToolStripMenuItem.Text = "Thông tin tài khoản (" + e.Acc.DisplayName + ")";
 		}
 
 		private void adminToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			fAdmin f = new fAdmin();
 			f.ShowDialog();
+			this.Close();
 		}
 
 		private void doanhThuToolStripMenuItem_Click(object sender, EventArgs e)
@@ -248,7 +275,7 @@ namespace ManageCafe
 
 			if (idBill != -1)
 			{
-				if(MessageBox.Show(string.Format("Bạn có chắc thanh toán hóa đơn cho bàn {0}\nTổng tiền - (Tổng tiền / 100) x Giảm giá\n=> {1} - ({1} / 100) x {2} = {3}", table.Name, totalPrice, discount, finalTotalPrice),"Thông báo",MessageBoxButtons.OKCancel) == DialogResult.OK)
+				if(MessageBox.Show(string.Format("Bạn có chắc thanh toán hóa đơn cho bàn {0}", table.Name),"Thông báo",MessageBoxButtons.OKCancel) == DialogResult.OK)
 				{
 					ExportFileExcel();
 					BillDAO.Instance.CheckOut(idBill,discount,(float)finalTotalPrice);

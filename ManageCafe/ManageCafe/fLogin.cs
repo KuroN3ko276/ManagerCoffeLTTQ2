@@ -1,4 +1,5 @@
 ﻿using ManageCafe.DAO;
+using ManageCafe.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,7 +22,7 @@ namespace ManageCafe
         bool Login(string username, string password)
         {
 
-            return Account.Instance.Login(username,password);
+            return AccountDAO.Instance.Login(username,password);
         }
 
 
@@ -31,7 +32,8 @@ namespace ManageCafe
             string password= txtPassword.Text;
             if(Login(username,password))
             {
-				fTableManage f = new fTableManage();
+                Account loginAccount = AccountDAO.Instance.GetAccountByUsername(username);
+				fTableManage f = new fTableManage(loginAccount);
 				this.Hide();
 				f.ShowDialog();
 				this.Show();

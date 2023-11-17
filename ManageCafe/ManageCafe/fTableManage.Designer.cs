@@ -31,11 +31,6 @@
 			this.components = new System.ComponentModel.Container();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.doanhThuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.thứcĂnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.danhMụcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.bànĂnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.tàiKhoảnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.thôngTinTàiKhoảnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.thôngTinCáNhânToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.đăngXuấtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,51 +77,10 @@
 			// 
 			// adminToolStripMenuItem
 			// 
-			this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.doanhThuToolStripMenuItem,
-            this.thứcĂnToolStripMenuItem,
-            this.danhMụcToolStripMenuItem,
-            this.bànĂnToolStripMenuItem,
-            this.tàiKhoảnToolStripMenuItem});
 			this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
 			this.adminToolStripMenuItem.Size = new System.Drawing.Size(67, 24);
 			this.adminToolStripMenuItem.Text = "Admin";
 			this.adminToolStripMenuItem.Click += new System.EventHandler(this.adminToolStripMenuItem_Click);
-			// 
-			// doanhThuToolStripMenuItem
-			// 
-			this.doanhThuToolStripMenuItem.Name = "doanhThuToolStripMenuItem";
-			this.doanhThuToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
-			this.doanhThuToolStripMenuItem.Text = "Doanh thu";
-			this.doanhThuToolStripMenuItem.Click += new System.EventHandler(this.doanhThuToolStripMenuItem_Click);
-			// 
-			// thứcĂnToolStripMenuItem
-			// 
-			this.thứcĂnToolStripMenuItem.Name = "thứcĂnToolStripMenuItem";
-			this.thứcĂnToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
-			this.thứcĂnToolStripMenuItem.Text = "Thức ăn";
-			this.thứcĂnToolStripMenuItem.Click += new System.EventHandler(this.thứcĂnToolStripMenuItem_Click);
-			// 
-			// danhMụcToolStripMenuItem
-			// 
-			this.danhMụcToolStripMenuItem.Name = "danhMụcToolStripMenuItem";
-			this.danhMụcToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
-			this.danhMụcToolStripMenuItem.Text = "Danh mục";
-			this.danhMụcToolStripMenuItem.Click += new System.EventHandler(this.danhMụcToolStripMenuItem_Click);
-			// 
-			// bànĂnToolStripMenuItem
-			// 
-			this.bànĂnToolStripMenuItem.Name = "bànĂnToolStripMenuItem";
-			this.bànĂnToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
-			this.bànĂnToolStripMenuItem.Text = "Bàn ăn";
-			this.bànĂnToolStripMenuItem.Click += new System.EventHandler(this.bànĂnToolStripMenuItem_Click);
-			// 
-			// tàiKhoảnToolStripMenuItem
-			// 
-			this.tàiKhoảnToolStripMenuItem.Name = "tàiKhoảnToolStripMenuItem";
-			this.tàiKhoảnToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
-			this.tàiKhoảnToolStripMenuItem.Text = "Tài khoản";
-			this.tàiKhoảnToolStripMenuItem.Click += new System.EventHandler(this.tàiKhoảnToolStripMenuItem_Click);
 			// 
 			// thôngTinTàiKhoảnToolStripMenuItem
 			// 
@@ -387,11 +341,6 @@
         private System.Windows.Forms.Button btnCheckOut;
         private System.Windows.Forms.Button btnSwitchTable;
         private System.Windows.Forms.ComboBox cbSwitchTable;
-        private System.Windows.Forms.ToolStripMenuItem doanhThuToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem thứcĂnToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem danhMụcToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bànĂnToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem tàiKhoảnToolStripMenuItem;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
