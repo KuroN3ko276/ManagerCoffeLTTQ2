@@ -22,7 +22,7 @@ namespace ManageCafe.DAO
 			private set => FoodDAO.Instance = value;
 		}
 
-		public List<Food> GetListFoodByBategoryID(int id)		//Lấy danh sách món ăn từ categoryID
+		public List<Food> GetListFoodByCategoryID(int id)		//Lấy danh sách món ăn từ categoryID
 		{
 			List<Food> list = new List<Food>();
 
