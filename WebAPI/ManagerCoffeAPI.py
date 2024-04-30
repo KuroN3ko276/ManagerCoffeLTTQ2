@@ -251,9 +251,9 @@ try:
         except Exception as e:
             return flask.jsonify({"mess": str(e)})
     
-    #Update Account
+    #EditAccount
     @app.route('/account/updateaccount', methods=['PUT'])
-    def updateAccount():
+    def UpdateAccount():
         try:
             username = flask.request.json.get('UserName')
             displayname = flask.request.json.get('DisplayName')
@@ -343,6 +343,355 @@ try:
             return resp
         except Exception as e:
             return flask.jsonify({"mess": str(e)})
+    #Insert Food
+    @app.route('/food/insert', methods=['POST'])
+    def insertFood():
+        try:
+            foodName = flask.request.json.get('name')
+            idCategory = flask.request.json.get('idCategory')
+            price = flask.request.json.get('price')
+            cursor = conn.cursor()
+            sql = 'Insert into food(name,idcategory,price) values (?,?,?)'
+            data = (foodName,idCategory,price)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})
+    
+    #Edit Food
+    @app.route('/food/edit',methods = ['PUT'])
+    def EditFood():
+        try:
+            foodName = flask.request.json.get('name')
+            idCategory = flask.request.json.get('idCategory')
+            price = flask.request.json.get('price')
+            idFood = flask.request.json.get('id')
+            cursor = conn.cursor()
+            sql = 'Update food set name = ?, idCategory = ?, price = ? where id = ?'
+            data = (foodName,idCategory,price,idFood)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+        
+    #Delete Food
+    @app.route('/food/delete',methods = ['DELETE'])
+    def DeleteFood():
+        try:
+            foodName = flask.request.json.get('name')
+            idFood = flask.request.json.get('id')
+            cursor = conn.cursor()
+            sql = 'Delete from food Where id = ? AND name = ?'
+            data = (foodName,idFood)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+        
+    #NumBillInfoByFoodId
+    @app.route('/billinfo/getbillinfobyidfood', methods=['GET'])
+    def getNumBillInfoByIdFood():
+        try:
+            idFood = flask.request.json.get('id')
+            cursor = conn.cursor()
+            sql = "select * from billinfo where idfood = ?"
+            cursor.execute(sql,idFood)
+            results = []
+            keys = [i[0] for i in cursor.description]
+            for row in cursor.fetchall():
+                results.append(dict(zip(keys, row)))
+            resp = flask.jsonify(results)
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})
+        
+    #InsertCategory
+    @app.route('/category/insert', methods=['POST'])
+    def insertCategory():
+        try:
+            categoryName = flask.request.json.get('name')
+            cursor = conn.cursor()
+            sql = 'Insert into foodcategory(name) values(?)'
+            cursor.execute(sql, categoryName)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})  
+    
+    #GetCategoryByName
+    @app.route('/category/getcategorybyname', methods=['GET'])
+    def getCategoryByName():
+        try:
+            categoryName = flask.request.json.get('name')
+            cursor = conn.cursor()
+            sql = "Select * from foodcategory Where name = ?"
+            cursor.execute(sql,categoryName)
+            results = []
+            keys = [i[0] for i in cursor.description]
+            for row in cursor.fetchall():
+                results.append(dict(zip(keys, row)))
+            resp = flask.jsonify(results)
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})
+    
+    #EditCategory
+    @app.route('/category/edit',methods = ['PUT'])
+    def EditCategory():
+        try:
+            categoryName = flask.request.json.get('name')
+            idCategory = flask.request.json.get('id')
+            cursor = conn.cursor()
+            sql = 'Update foodcategory set Name = ? where id = ? '
+            data = (categoryName,idCategory)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+    
+    #Delete Category
+    @app.route('/category/delete',methods = ['DELETE'])
+    def DeleteCategory():
+        try:
+            categoryName = flask.request.json.get('name')
+            idCategory = flask.request.json.get('id')
+            cursor = conn.cursor()
+            sql = 'Delete from foodcategory Where id = ? AND name = ?'
+            data = (categoryName,idCategory)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+    
+    #GetTableByName
+    @app.route('/table/gettablebyname',methods=['GET'])
+    def GetTableByName():
+        try:
+            categoryName = flask.request.json.get('name')
+            cursor = conn.cursor()
+            sql = "Select * from tablefood Where name = ?"
+            cursor.execute(sql,categoryName)
+            results = []
+            keys = [i[0] for i in cursor.description]
+            for row in cursor.fetchall():
+                results.append(dict(zip(keys, row)))
+            resp = flask.jsonify(results)
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})
+    
+    #InsertTable
+    @app.route('/table/insert', methods=['POST'])
+    def insertTable():
+        try:
+            tableName = flask.request.json.get('name')
+            tableStatus = flask.request.json.get('status')
+            cursor = conn.cursor()
+            sql = 'insert into tablefood(name,status) values(?,?)'
+            data = (tableName,tableStatus)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})
+    
+    #EditTable
+    @app.route('/table/edit',methods = ['PUT'])
+    def EditTable():
+        try:
+            tableName = flask.request.json.get('name')
+            idTable = flask.request.json.get('id')
+            statusTable = flask.request.json.get('status')
+            cursor = conn.cursor()
+            sql = 'Update TableFood set name = ? , status = ? where id = ?'
+            data = (tableName,statusTable,idTable)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+    
+    #DeleteTable
+    @app.route('/table/delete',methods = ['DELETE'])
+    def DeleteTable():
+        try:
+            tableName = flask.request.json.get('name')
+            idTable = flask.request.json.get('id')
+            cursor = conn.cursor()
+            sql = 'Delete from tablefood Where id = ? AND name = ?'
+            data = (tableName,idTable)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+    
+    #GetBillByIdTable
+    @app.route('/billinfo/getbillbyidtable', methods=['GET'])
+    def getBillByIdTable():
+        try:
+            idTable = flask.request.json.get('id')
+            cursor = conn.cursor()
+            sql = "select * from bill where idtable = ?"
+            cursor.execute(sql,idTable)
+            results = []
+            keys = [i[0] for i in cursor.description]
+            for row in cursor.fetchall():
+                results.append(dict(zip(keys, row)))
+            resp = flask.jsonify(results)
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})
+    
+    #InsertAccount
+    @app.route('/account/insert', methods=['POST'])
+    def insertAccount():
+        try:
+            userName = flask.request.json.get('UserName')
+            displayName = flask.request.json.get('DisplayName')
+            passWord = flask.request.json.get('PassWord')
+            typeAccount = flask.request.json.get('type')
+            cursor = conn.cursor()
+            sql = 'Insert into Account(username,displayname,password,type) values(?,?,?,?)'
+            data = (userName,displayName,passWord,typeAccount)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})
+    
+    #EditAccount
+    @app.route('/account/edit',methods = ['PUT'])
+    def EditAccount():
+        try:
+            userName = flask.request.json.get('UserName')
+            displayName = flask.request.json.get('DisplayName')
+            passWord = flask.request.json.get('PassWord')
+            typeAccount = flask.request.json.get('type')
+            cursor = conn.cursor()
+            sql = 'Update Account set username = ?, displayname = ?,password =?, type = ? Where username = ? OR displayname = ? OR type = ?'
+            data = (userName,displayName,passWord,typeAccount,userName,displayName,typeAccount)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+    
+    #DeleteAccount
+    # @app.route('/account/delete',methods = ['DELETE'])
+    # def DeleteAccount():
+        try:
+            userName = flask.request.json.get('UserName')
+            displayName = flask.request.json.get('DisplayName')
+            cursor = conn.cursor()
+            sql = 'Delete from Account Where UserName = ? AND DisplayName = ?'
+            data = (userName,displayName)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+    
+    #GetAllListCategory
+    @app.route('/category/getalllistcategory', methods=['GET'])
+    def getAllListCategory():
+        try:
+            cursor = conn.cursor()
+            sql = "Select id as N'Mã loại', name as N'Tên loại' from foodcategory"
+            cursor.execute(sql)
+            results = []
+            keys = [i[0] for i in cursor.description]
+            for row in cursor.fetchall():
+                results.append(dict(zip(keys, row)))
+            resp = flask.jsonify(results)
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})  
+    
+    #GetAllListFood
+    @app.route('/food/getalllistfood', methods=['GET'])
+    def getAllListFood():
+        try:
+            cursor = conn.cursor()
+            sql = "Select id as N'Mã món ăn',name as N'Tên món ăn', idCategory as N'Mã loại', price as N'Đơn giá' from Food"
+            cursor.execute(sql)
+            results = []
+            keys = [i[0] for i in cursor.description]
+            for row in cursor.fetchall():
+                results.append(dict(zip(keys, row)))
+            resp = flask.jsonify(results)
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})  
+    
+    #GetAllListTable
+    @app.route('/table/getalllisttable', methods=['GET'])
+    def getAllListTable():
+        try:
+            cursor = conn.cursor()
+            sql = "Select id as N'Mã bàn', name as N'Tên bàn', status as N'Trạng thái' from TableFood"
+            cursor.execute(sql)
+            results = []
+            keys = [i[0] for i in cursor.description]
+            for row in cursor.fetchall():
+                results.append(dict(zip(keys, row)))
+            resp = flask.jsonify(results)
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})  
+    
+    #GetAllListAccount
+    @app.route('/account/getalllistaccount', methods=['GET'])
+    def getAllListAccount():
+        try:
+            cursor = conn.cursor()
+            sql = "select UserName as N'Tên tài khoản',Displayname as N'Tên người dùng',Type as N'Loại tài khoản' from Account"
+            cursor.execute(sql)
+            results = []
+            keys = [i[0] for i in cursor.description]
+            for row in cursor.fetchall():
+                results.append(dict(zip(keys, row)))
+            resp = flask.jsonify(results)
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})  
     
     if __name__ == '__main__':
         app.run(port=3333)

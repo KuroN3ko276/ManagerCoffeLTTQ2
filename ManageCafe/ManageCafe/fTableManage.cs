@@ -100,7 +100,7 @@ namespace ManageCafe
 
 		void LoadFoodListByCategoryID(int id) //Load đồ ăn theo loại 
 		{
-			List<Food> listFood = FoodDAO.Instance.GetListFoodByBategoryID(id);
+			List<Food> listFood = FoodDAO.Instance.GetListFoodByCategoryID(id);
 			cbFood.DataSource = listFood;
 			cbFood.DisplayMember = "Name";
 		}
