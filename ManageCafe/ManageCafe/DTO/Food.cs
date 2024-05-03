@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace ManageCafe.DTO
 	public class Food
 	{
 
-		private int iD;
+		private int id;
 
 		private string name;
 
@@ -18,16 +19,14 @@ namespace ManageCafe.DTO
 
 		private int idCategory;
 
-		public Food(int iD, string name, float price, int idCategory)
+		public Food() { }
+
+		public Food(int id, string name, float price, int idCategory)
 		{
-			ID = iD;
-			Name = name;
-			Price = price;
-			IdCategory = idCategory;
-			ID = iD;
-			Name = name;
-			Price = price;
-			IdCategory = idCategory;
+			this.id = id;
+			this.name = name;
+			this.price = price;
+			this.idCategory = idCategory;
 		}
 
 		public Food(DataRow row) 
@@ -37,10 +36,16 @@ namespace ManageCafe.DTO
 			idCategory = (int)row["idCategory"];
 			Price = (float)Convert.ToDouble(row["price"].ToString());
 		}
+		[JsonProperty("ID")]
+		public int ID { get => id; set => id = value; }
+		[JsonProperty("Name")]
 
-		public int ID { get => iD; set => iD = value; }
 		public string Name { get => name; set => name = value; }
+		[JsonProperty("price")]
+
 		public float Price { get => price; set => price = value; }
+		[JsonProperty("idCategory")]
+
 		public int IdCategory { get => idCategory; set => idCategory = value; }
 	}
 }

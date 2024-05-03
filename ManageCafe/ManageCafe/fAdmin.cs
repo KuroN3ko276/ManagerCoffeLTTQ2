@@ -1,76 +1,202 @@
 ﻿using ManageCafe.Admin;
 using ManageCafe.DAO;
+using ManageCafe.DTO;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ManageCafe
 {
-    public partial class fAdmin : Form
-    {
-        public fAdmin()
-        {
-            InitializeComponent();
-            LoadDateTimePickerBill();
-            LoadBillList(dtpkFromDate.Value, dtpkToDate.Value);
-            LoadCategoryList();
-            LoadFoodList();
-            FillCategoryIntoCombobox();
+	public partial class fAdmin : Form
+	{
+		private static readonly HttpClient client = new HttpClient();
+
+		private static readonly string getAllFood = "http://192.168.0.104:3333/food/getAllFood";
+		private static readonly string getAllTable = "http://192.168.0.104:3333/table/gettablelist";
+		private static readonly string getAllCategory = "http://192.168.0.104:3333/category/getlistcategory";
+		private static readonly string getAllBill = "http://192.168.0.104:3333/bill/getbillbydate";
+		private static readonly string getAllAccount = "http://192.168.0.104:3333/account/getAllAccount";
+		public fAdmin()
+		{
+			InitializeComponent();
+			LoadDateTimePickerBill();
+			LoadBillListAsync(dtpkFromDate.Value.ToString("yyyy/MM/dd"), dtpkToDate.Value.ToString("yyyy/MM/dd"));
+			LoadCategoryList();
+			LoadFoodList();
+			FillCategoryIntoCombobox();
 			LoadTableFoodList();
 			LoadAccountList();
 		}
-		#region methods
-        void LoadDateTimePickerBill()
-        {
-            DateTime today = DateTime.Now;
-            dtpkFromDate.Value = new DateTime(today.Year, today.Month, 1);
-            dtpkToDate.Value = dtpkFromDate.Value.AddMonths(1).AddDays(-1);
-        }
-        void LoadBillList(DateTime checkIn, DateTime checkOut)
-        {
-            string query = "EXEC dbo.USP_GetListBillByDate @checkIn , @checkOut";
+		//#region methods
+		//void LoadDateTimePickerBill()
+		//{
+		//	DateTime today = DateTime.Now;
+		//	dtpkFromDate.Value = new DateTime(today.Year, today.Month, 1);
+		//	dtpkToDate.Value = dtpkFromDate.Value.AddMonths(1).AddDays(-1);
+		//}
+		// async Task LoadBillListAsync(string checkIn, string checkOut)
+		//{
+		//	//string query = "EXEC dbo.USP_GetListBillByDate @checkIn , @checkOut";
 
-            dtgvBill.DataSource = DataProvider.Instance.ExecuteQuery(query, new object[] {checkIn,checkOut});
+		//	//dtgvBill.DataSource = DataProvider.Instance.ExecuteQuery(query, new object[] { checkIn, checkOut });
+
+		//	string queryString = $"bill/getbillbydate?checkIn={checkIn}&checkOut={checkOut}";
+		//	HttpResponseMessage response = await client.GetAsync("http://192.168.0.104:3333/" + queryString);
+
+		//	if (response.IsSuccessStatusCode)
+		//	{
+		//		string jsonResponse = await response.Content.ReadAsStringAsync();
+		//		//MessageBox.Show(jsonResponse); // Hiển thị dữ liệu JSON trong một hộp thoại cảnh báo
+
+		//		var billList = JsonConvert.DeserializeObject<List<DTO.Bill>>(jsonResponse);
+		//		dtgvBill.DataSource = billList;
+		//	}
+		//}
+		//async void LoadCategoryList()
+		//{
+		//	HttpResponseMessage response = await client.GetAsync(getAllCategory);
+
+		//	if (response.IsSuccessStatusCode)
+		//	{
+		//		var content = await response.Content.ReadAsStringAsync();
+
+		//		var CategoryList = JsonConvert.DeserializeObject<List<Category>>(content);
+		//		dtgvCategory.DataSource = CategoryList;
+		//	}
+		//}
+		//void FillCategoryIntoCombobox()
+		//{
+		//	DataTable dtCategory = DataProvider.Instance.ExecuteQuery("select * from FoodCategory");
+		//	FillComBoBox(cbFoodCategory, dtCategory, "Name", "ID");
+		//}
+		//void LoadFoodList()
+		//{
+		//	HttpResponseMessage response = client.GetAsync(getAllFood).Result;
+
+		//	if (response.IsSuccessStatusCode)
+		//	{
+		//		var content = response.Content.ReadAsStringAsync().Result;
+
+		//		var foodList = JsonConvert.DeserializeObject<List<Food>>(content);
+		//		dtgvFood.DataSource = foodList;
+		//	}
+		//}
+		//void LoadTableFoodList()
+		//{
+		//	HttpResponseMessage response = client.GetAsync(getAllTable).Result;
+
+		//	if (response.IsSuccessStatusCode)
+		//	{
+		//		var content = response.Content.ReadAsStringAsync().Result;
+
+		//		var foodList = JsonConvert.DeserializeObject<List<Table>>(content);
+		//		dtgvTable.DataSource = foodList;
+		//	}
+		//}
+		//void LoadAccountList()
+		//{
+		//	HttpResponseMessage response = client.GetAsync(getAllAccount).Result;
+
+		//	if (response.IsSuccessStatusCode)
+		//	{
+		//		var content = response.Content.ReadAsStringAsync().Result;
+
+		//		var foodList = JsonConvert.DeserializeObject<List<Account>>(content);
+		//		dtgvAccount.DataSource = foodList;
+		//	}
+		//}
+		//void FillComBoBox(ComboBox cbname, DataTable data, string displayMember, string valueMember)
+		//{
+		//	cbname.DataSource = data;
+		//	cbname.DisplayMember = displayMember;
+		//	cbname.ValueMember = valueMember;
+		//}
+		//#endregion
+		#region methods
+		void LoadDateTimePickerBill()
+		{
+			DateTime today = DateTime.Now;
+			dtpkFromDate.Value = new DateTime(today.Year, today.Month, 1);
+			dtpkToDate.Value = dtpkFromDate.Value.AddMonths(1).AddDays(-1);
 		}
-		void LoadCategoryList()
-        {
-            string query = "Select id as N'Mã loại', name as N'Tên loại' from foodcategory";
-            dtgvCategory.DataSource = DataProvider.Instance.ExecuteQuery(query);
-            txtCategoryID.Text = "";
-            txtCategoryName.Text = "";
+		async Task LoadBillListAsync(string checkIn, string checkOut)
+		{
+			string queryString = $"bill/getbillbydate?checkIn={checkIn}&checkOut={checkOut}";
+			HttpResponseMessage response = await client.GetAsync("http://192.168.0.104:3333/" + queryString);
+
+			if (response.IsSuccessStatusCode)
+			{
+				string jsonResponse = await response.Content.ReadAsStringAsync();
+				var billList = JsonConvert.DeserializeObject<List<DTO.Bill>>(jsonResponse);
+				dtgvBill.DataSource = billList;
+			}
 		}
+
+		async Task LoadCategoryList()
+		{
+			HttpResponseMessage response = await client.GetAsync(getAllCategory);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				var categoryList = JsonConvert.DeserializeObject<List<Category>>(content);
+				dtgvCategory.DataSource = categoryList;
+			}
+		}
+
 		void FillCategoryIntoCombobox()
 		{
 			DataTable dtCategory = DataProvider.Instance.ExecuteQuery("select * from FoodCategory");
 			FillComBoBox(cbFoodCategory, dtCategory, "Name", "ID");
 		}
-		void LoadFoodList()
+
+		async Task LoadFoodList()
 		{
-			string query = "Select id as N'Mã món ăn',name as N'Tên món ăn', idCategory as N'Mã loại', price as N'Đơn giá' from Food";
-			dtgvFood.DataSource = DataProvider.Instance.ExecuteQuery(query);
-			//cbFoodCategory.Items.Clear();
-			txtFoodID.Text = "";
-			txtFoodName.Text = "";
-			nmFoodPrice.Value = 0;
+			HttpResponseMessage response = await client.GetAsync(getAllFood);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				var foodList = JsonConvert.DeserializeObject<List<Food>>(content);
+				dtgvFood.DataSource = foodList;
+			}
 		}
-		void LoadTableFoodList()
+
+		async Task LoadTableFoodList()
 		{
-			string query = "Select id as N'Mã bàn', name as N'Tên bàn', status as N'Trạng thái' from TableFood";
-			dtgvTable.DataSource = DataProvider.Instance.ExecuteQuery(query);
-			txtTableID.Text = "";
-			txtTableName.Text = "";
+			HttpResponseMessage response = await client.GetAsync(getAllTable);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				var tableList = JsonConvert.DeserializeObject<List<Table>>(content);
+				dtgvTable.DataSource = tableList;
+			}
 		}
-		void LoadAccountList()
+
+		async Task LoadAccountList()
 		{
-			string query = "select UserName as N'Tên tài khoản',Displayname as N'Tên người dùng',Type as N'Loại tài khoản' from Account ";
-			dtgvAccount.DataSource = DataProvider.Instance.ExecuteQuery(query);
+			HttpResponseMessage response = await client.GetAsync(getAllAccount);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				var accountList = JsonConvert.DeserializeObject<List<Account>>(content);
+				dtgvAccount.DataSource = accountList;
+			}
 		}
+
 		void FillComBoBox(ComboBox cbname, DataTable data, string displayMember, string valueMember)
 		{
 			cbname.DataSource = data;
@@ -82,43 +208,44 @@ namespace ManageCafe
 		#region events
 		private void btnViewBill_Click(object sender, EventArgs e)
 		{
-            LoadBillList(dtpkFromDate.Value,dtpkToDate.Value);
+			LoadBillListAsync(dtpkFromDate.Value.ToString("yyyy/MM/dd"), dtpkToDate.Value.ToString("yyyy/MM/dd"));
 		}
 		private void btnShowCategory_Click(object sender, EventArgs e)
 		{
-            LoadCategoryList();
+			LoadCategoryList();
 		}
 		private void dtgvCategory_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			txtCategoryID.Text = dtgvCategory.CurrentRow.Cells[0].Value.ToString();
 			txtCategoryName.Text = dtgvCategory.CurrentRow.Cells[1].Value.ToString();
 		}
+		// add category
 		private void btnAddCategory_Click(object sender, EventArgs e)
 		{
-            try
-            {
-                DataTable check = DataProvider.Instance.ExecuteQuery("Select * from foodcategory Where name = N'" + txtCategoryName.Text + "'");
-                if(check.Rows.Count == 0) // Chua co ma name foodcategory do
-                {
+			try
+			{
+				DataTable check = DataProvider.Instance.ExecuteQuery("Select * from foodcategory Where name = N'" + txtCategoryName.Text + "'");
+				if (check.Rows.Count == 0) // Chua co ma name foodcategory do
+				{
 					if (txtCategoryName.Text == "")
 					{
 						MessageBox.Show("Bạn chưa nhập tên danh mục!");
 						txtCategoryName.Focus();
-                    }
-                    else
-                    {
-						string code = "Insert into foodcategory(name) values(N'"+ txtCategoryName.Text + "')";
-                        int result = DataProvider.Instance.ExecuteNonQuery(code);
-                        if(result > 0)
-                        {
-                            MessageBox.Show("Thêm category thành công");
-                            return;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Lỗi không thể thêm category mới");
-                            return;
-                        }
+					}
+					else
+					{
+						string code = "Insert into foodcategory(name) values(N'" + txtCategoryName.Text + "')";
+						int result = DataProvider.Instance.ExecuteNonQuery(code);
+						if (result > 0)
+						{
+							MessageBox.Show("Thêm category thành công");
+							return;
+						}
+						else
+						{
+							MessageBox.Show("Lỗi không thể thêm category mới");
+							return;
+						}
 					}
 				}
 				else
@@ -126,16 +253,16 @@ namespace ManageCafe
 					MessageBox.Show("Đã có category này!!", "Message");
 					return;
 				}
-                
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Không thể thêm category mới vì "+ex.Message+"");
-            }
+
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Không thể thêm category mới vì " + ex.Message + "");
+			}
 		}
 		private void btnEditCategory_Click(object sender, EventArgs e)
 		{
-			if(txtCategoryID.Text == "" && txtCategoryName.Text == "")
+			if (txtCategoryID.Text == "" && txtCategoryName.Text == "")
 			{
 				MessageBox.Show("Bạn chưa nhập thay đổi!");
 				return;
@@ -153,7 +280,8 @@ namespace ManageCafe
 			{
 				MessageBox.Show("Bạn chưa chọn danh mục muốn xóa!");
 				return;
-			} else
+			}
+			else
 			{
 				DataTable result = DataProvider.Instance.ExecuteQuery("Select * from food Where idCategory = " + txtCategoryID.Text + "");
 				if (result.Rows.Count == 0)
@@ -174,13 +302,13 @@ namespace ManageCafe
 					return;
 				}
 			}
-			
+
 		}
 		private void btnShowFood_Click(object sender, EventArgs e)
 		{
-            LoadFoodList();
-			
-		}   
+			LoadFoodList();
+
+		}
 		private void dtgvFood_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			txtFoodID.Text = dtgvFood.CurrentRow.Cells[0].Value.ToString();
@@ -365,8 +493,9 @@ namespace ManageCafe
 		private void dtgvAccount_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			txtUsername.Text = dtgvAccount.CurrentRow.Cells[0].Value.ToString();
-			txtDisplayName.Text = dtgvAccount.CurrentRow.Cells[1].Value.ToString();
-			nmTypeAccount.Text = dtgvAccount.CurrentRow.Cells[2].Value.ToString();
+			txtPassword.Text = dtgvAccount.CurrentRow.Cells[1].Value.ToString();
+			txtDisplayName.Text = dtgvAccount.CurrentRow.Cells[2].Value.ToString();
+			nmTypeAccount.Text = dtgvAccount.CurrentRow.Cells[3].Value.ToString();
 		}
 		private void btnAddAccount_Click(object sender, EventArgs e)
 		{

@@ -456,15 +456,16 @@ END
 GO
 
 
-CREATE PROC USP_GetListBillByDate
+alter PROC USP_GetListBillByDate
 @checkIn date, @checkOut date
 AS 
 BEGIN
-	SELECT t.name AS [Tên bàn], b.totalPrice AS [Tổng tiền], DateCheckIn AS [Ngày vào], DateCheckOut AS [Ngày ra], discount AS [Giảm giá]
+	SELECT t.name AS [nameTable], b.totalPrice AS [totalPrice], DateCheckIn AS [dateCheckIn], DateCheckOut AS [dateCheckOut], discount AS [discount]
 	FROM dbo.Bill AS b,dbo.TableFood AS t
 	WHERE DateCheckIn >= @checkIn AND DateCheckOut <= @checkOut AND b.status = 1
 	AND t.id = b.idTable
 END
+exec USP_GetListBillByDate @checkIn = '2024-04-01', @checkOut = '2024-04-30'
 GO
 
 CREATE PROC USP_UpdateAccount

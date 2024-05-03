@@ -4,47 +4,51 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace ManageCafe.DTO
 {
+
 	public class Bill
 	{
-		public Bill(int id, DateTime? dateCheckIn, DateTime? dateCheckOut, int status,int discount=0) 
+		public Bill() { }
+		public Bill(int id, DateTime dateCheckIn, DateTime dateCheckOut, int totalPrice, int discount = 0)
 		{
-			this.iD = id;
+			this.id = id;
 			this.dateCheckIn = dateCheckIn;
 			this.dateCheckOut = dateCheckOut;
-			this.status = status;
-			this.discount = discount;	
+			this.totalPrice = totalPrice;
+			this.discount = discount;
 		}
 
 		public Bill(DataRow row)
 		{
-			this.ID = (int)row["id"];
-			this.dateCheckIn = (DateTime?)row["dateCheckIn"];
-			var dateCheckOutTemp = row["dateCheckOut"];
-			if(dateCheckOutTemp.ToString() != "")
-				this.dateCheckOut = (DateTime?)dateCheckOutTemp;
+			this.ID = (int)row["ID"];
+			this.DateCheckIn = (DateTime)row["DateCheckIn"];
+			if (row["DateCheckOut"].ToString() != "")
+				this.DateCheckOut = (DateTime)row["DateCheckOut"];
 
-			this.status = (int)row["status"];
+			if (row["TotalPrice"].ToString() != "")
+				this.ToTalPrice = (float)Convert.ToDouble(row["TotalPrice"]);
 			if (row["discount"].ToString() != "")
-				this.discount = (int)row["discount"];
+				this.discount = (int)row["Discount"];
 		}
 
 		private int discount;
 
-		private int iD;
+		private int id;
 
-		private int status;
+		private float totalPrice;
 
-		private DateTime? dateCheckIn;
+		private DateTime dateCheckIn;
 
-		private DateTime? dateCheckOut;
+		private DateTime dateCheckOut;
 
-		public int ID { get => iD; set => iD= value; }
-		public DateTime? DateCheckOut { get => dateCheckOut; set => dateCheckOut = value; }
-		public DateTime? DateCheckIn { get => dateCheckIn; set => dateCheckIn = value; }
-		public int Status { get => status; set => status = value; }
-		public int Discount { get => discount; set => discount = value; }
+		public int ID { get; set; }
+		public DateTime DateCheckIn { get; set; }
+
+		public DateTime DateCheckOut { get; set; }
+		public int Discount { get; set; }
+		public float ToTalPrice { get; set; }
 	}
 }

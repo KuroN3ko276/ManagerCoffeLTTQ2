@@ -17,20 +17,20 @@ using static ManageCafe.fAccountProfile;
 
 namespace ManageCafe
 {
-    public partial class fTableManage : Form
-    {
+	public partial class fTableManage : Form
+	{
 		private Account loginAccount;
 
-		public Account LoginAccount 
+		public Account LoginAccount
 		{
 			get { return loginAccount; }
 			set { loginAccount = value; changeAcccount(loginAccount.Type); }
 		}
 
 		public fTableManage(Account acc)
-        {
-            InitializeComponent();
-			
+		{
+			InitializeComponent();
+
 			this.LoginAccount = acc;
 
 			LoadTable();
@@ -43,11 +43,11 @@ namespace ManageCafe
 		void changeAcccount(int type)
 		{
 			adminToolStripMenuItem.Enabled = type == 1;
-			thôngTinTàiKhoảnToolStripMenuItem.Text += " ("+LoginAccount.DisplayName+")";
+			thôngTinTàiKhoảnToolStripMenuItem.Text += " (" + LoginAccount.DisplayName + ")";
 		}
 
 
-		void LoadTable() 
+		void LoadTable()
 		{
 			flpTable.Controls.Clear();
 			List<Table> tableList = TableDAO.Instance.LoadTableList();
@@ -58,7 +58,7 @@ namespace ManageCafe
 				btn.Click += Btn_TableClick;
 				btn.Tag = table;
 
-				switch(table.Status)
+				switch (table.Status)
 				{
 					case "Trống":
 						btn.BackColor = Color.LightGreen;
@@ -77,7 +77,7 @@ namespace ManageCafe
 			lsvBill.Items.Clear();
 			List<ManageCafe.DTO.Menu> listMenu = MenuDAO.Instance.GetListMenuByTable(id);
 			float totalPrice = 0;
-			foreach(ManageCafe.DTO.Menu item in listMenu)
+			foreach (ManageCafe.DTO.Menu item in listMenu)
 			{
 				ListViewItem lsvItem = new ListViewItem(item.FoodName.ToString());
 				lsvItem.SubItems.Add(item.Count.ToString());
@@ -87,11 +87,11 @@ namespace ManageCafe
 				lsvBill.Items.Add(lsvItem);
 			}
 			CultureInfo cultureInfo = new CultureInfo("vi-VN");
-			txbTotalPrice.Text = totalPrice.ToString("c",cultureInfo);
+			txbTotalPrice.Text = totalPrice.ToString("c", cultureInfo);
 
 		}
 
-		void LoadCategory()	//Load loại đồ ăn
+		void LoadCategory() //Load loại đồ ăn
 		{
 			List<Category> listCategory = CategoryDAO.Instance.GetListCategory();
 			cbCategory.DataSource = listCategory;
@@ -127,7 +127,7 @@ namespace ManageCafe
 			Excel.Range tenTruong = (Excel.Range)exSheet.Cells[1, 1]; //Đưa con trỏ vào ô A1
 																	  //Đưa dữ liệu vào file Excel
 
-			string query= "select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice,TableFood.id as idtable from bill join BillInfo on bill.id=BillInfo.idBill join TableFood on TableFood.id=Bill.idTable join food on Food.id=BillInfo.idFood where tablefood.id="+table.ID+" and Bill.status = 0";
+			string query = "select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice,TableFood.id as idtable from bill join BillInfo on bill.id=BillInfo.idBill join TableFood on TableFood.id=Bill.idTable join food on Food.id=BillInfo.idFood where tablefood.id=" + table.ID + " and Bill.status = 0";
 			DataTable data = DataProvider.Instance.ExecuteQuery(query);
 			tenTruong.Range["A1:D1"].MergeCells = true;
 			tenTruong.Range["A1"].Value = "CẬU CHÍNH COFFEE";
@@ -255,7 +255,7 @@ namespace ManageCafe
 			if (idBill == -1)
 			{
 				BillDAO.Instance.InsertBill(table.ID);
-				BillInfoDAO.Instance.InsertBillInfo(BillDAO.Instance.GetMaxIDBill(),foodID,count);
+				BillInfoDAO.Instance.InsertBillInfo(BillDAO.Instance.GetMaxIDBill(), foodID, count);
 			}
 			else
 			{
@@ -275,10 +275,10 @@ namespace ManageCafe
 
 			if (idBill != -1)
 			{
-				if(MessageBox.Show(string.Format("Bạn có chắc thanh toán hóa đơn cho bàn {0}", table.Name),"Thông báo",MessageBoxButtons.OKCancel) == DialogResult.OK)
+				if (MessageBox.Show(string.Format("Bạn có chắc thanh toán hóa đơn cho bàn {0}", table.Name), "Thông báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
 				{
 					ExportFileExcel();
-					BillDAO.Instance.CheckOut(idBill,discount,(float)finalTotalPrice);
+					BillDAO.Instance.CheckOut(idBill, discount, (float)finalTotalPrice);
 					showBill(table.ID);
 					LoadTable();
 

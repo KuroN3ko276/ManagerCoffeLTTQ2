@@ -55,5 +55,7 @@ namespace ManageCafe.DAO
 			string query = "Update dbo.Bill Set status = 1,DateCheckOut = GETDATE(), discount = "+discount+",totalPrice ="+totalPrice+" where id =  "+id;
 			DataProvider.Instance.ExecuteNonQuery(query);
 		}
+
+		
 	}
 }
