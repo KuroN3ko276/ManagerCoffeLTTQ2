@@ -252,7 +252,7 @@ VALUES  ( 1, -- idBill - int
           )
 GO
 
-CREATE PROC USP_InsertBill
+CREATE or alter PROC USP_InsertBill
 @idTable INT
 AS
 BEGIN
@@ -264,7 +264,7 @@ BEGIN
 	          discount
 	        )
 	VALUES  ( GETDATE() , -- DateCheckIn - date
-	          NULL , -- DateCheckOut - date
+	          '0/0/0' , -- DateCheckOut - date
 	          @idTable , -- idTable - int
 	          0,  -- status - int
 	          0
@@ -272,6 +272,7 @@ BEGIN
 END
 GO
 
+exec USP_InsertBill @idTable =4
 
 CREATE or alter PROC USP_InsertBillInfo
 @idBill INT, @idFood INT, @count INT
@@ -307,6 +308,8 @@ BEGIN
 	END
 END
 GO
+
+exec USP_InsertBillInfo @idBill = 1036, @idFood = 3 , @count = 5
 select * from bill
 select * from BillInfo
 select * from TableFood
