@@ -198,7 +198,6 @@ namespace ManageCafe
 		{
 			fAdmin f = new fAdmin();
 			f.ShowDialog();
-			this.Close();
 		}
 
 		private void doanhThuToolStripMenuItem_Click(object sender, EventArgs e)

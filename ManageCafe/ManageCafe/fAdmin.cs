@@ -22,11 +22,11 @@ namespace ManageCafe
 	{
 		private static readonly HttpClient client = new HttpClient();
 
-		private static readonly string getAllFood = "http://192.168.0.104:3333/food/getAllFood";
-		private static readonly string getAllTable = "http://192.168.0.104:3333/table/gettablelist";
-		private static readonly string getAllCategory = "http://192.168.0.104:3333/category/getlistcategory";
-		private static readonly string getAllBill = "http://192.168.0.104:3333/bill/getbillbydate";
-		private static readonly string getAllAccount = "http://192.168.0.104:3333/account/getAllAccount";
+		private static readonly string getAllFood = "http://127.0.0.1:3333/food/getAllFood";
+		private static readonly string getAllTable = "http://127.0.0.1:3333/table/gettablelist";
+		private static readonly string getAllCategory = "http://127.0.0.1:3333/category/getlistcategory";
+		private static readonly string getAllBill = "http://127.0.0.1:3333/bill/getbillbydate";
+		private static readonly string getAllAccount = "http://127.0.0.1:3333/account/getAllAccount";
 		public fAdmin()
 		{
 			InitializeComponent();
@@ -133,7 +133,7 @@ namespace ManageCafe
 		async Task LoadBillListAsync(string checkIn, string checkOut)
 		{
 			string queryString = $"bill/getbillbydate?checkIn={checkIn}&checkOut={checkOut}";
-			HttpResponseMessage response = await client.GetAsync("http://192.168.0.104:3333/" + queryString);
+			HttpResponseMessage response = await client.GetAsync("http://127.0.0.1:3333/" + queryString);
 
 			if (response.IsSuccessStatusCode)
 			{
@@ -220,88 +220,211 @@ namespace ManageCafe
 			txtCategoryName.Text = dtgvCategory.CurrentRow.Cells[1].Value.ToString();
 		}
 		// add category
-		private void btnAddCategory_Click(object sender, EventArgs e)
+		private async void btnAddCategory_Click(object sender, EventArgs e)
 		{
 			try
 			{
-				DataTable check = DataProvider.Instance.ExecuteQuery("Select * from foodcategory Where name = N'" + txtCategoryName.Text + "'");
-				if (check.Rows.Count == 0) // Chua co ma name foodcategory do
+				if (string.IsNullOrWhiteSpace(txtCategoryName.Text))
 				{
-					if (txtCategoryName.Text == "")
-					{
-						MessageBox.Show("Bạn chưa nhập tên danh mục!");
-						txtCategoryName.Focus();
-					}
-					else
-					{
-						string code = "Insert into foodcategory(name) values(N'" + txtCategoryName.Text + "')";
-						int result = DataProvider.Instance.ExecuteNonQuery(code);
-						if (result > 0)
-						{
-							MessageBox.Show("Thêm category thành công");
-							return;
-						}
-						else
-						{
-							MessageBox.Show("Lỗi không thể thêm category mới");
-							return;
-						}
-					}
-				}
-				else
-				{
-					MessageBox.Show("Đã có category này!!", "Message");
+					MessageBox.Show("Bạn chưa nhập tên danh mục!");
+					txtCategoryName.Focus();
 					return;
 				}
 
+				// Tạo đối tượng category từ tên danh mục
+				var newCategory = new { name = txtCategoryName.Text };
+
+				// Chuyển đối tượng category thành chuỗi JSON
+				string jsonCategory = JsonConvert.SerializeObject(newCategory);
+
+				// Tạo đường dẫn API và HttpClient
+				string apiUrl = "http://127.0.0.1:3333/category/insertCategory";
+				HttpClient client = new HttpClient();
+
+				// Tạo nội dung yêu cầu POST với dữ liệu JSON
+				var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
+
+				// Gửi yêu cầu POST đến API
+				HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+				// Đọc nội dung phản hồi từ máy chủ Python
+				string responseContent = await response.Content.ReadAsStringAsync();
+
+				// Xác định xem yêu cầu đã thành công hay không
+				if (response.IsSuccessStatusCode)
+				{
+					// Kiểm tra nội dung phản hồi từ máy chủ
+					dynamic responseData = JsonConvert.DeserializeObject(responseContent);
+					string message = responseData.mess;
+					if (message == "Thành công")
+					{
+						MessageBox.Show("Thêm category thành công");
+						LoadCategoryList();
+						FillCategoryIntoCombobox();
+					}
+					else if (message == "Đã có category này")
+					{
+						MessageBox.Show("Đã có category này!");
+					}
+					else
+					{
+						MessageBox.Show("Lỗi không thể thêm category mới");
+					}
+				}
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show("Không thể thêm category mới vì " + ex.Message + "");
+				MessageBox.Show("Không thể thêm category mới vì " + ex.Message);
 			}
 		}
-		private void btnEditCategory_Click(object sender, EventArgs e)
+		// edit category
+		private async void btnEditCategory_Click(object sender, EventArgs e)
 		{
-			if (txtCategoryID.Text == "" && txtCategoryName.Text == "")
+			if (string.IsNullOrWhiteSpace(txtCategoryID.Text) || string.IsNullOrWhiteSpace(txtCategoryName.Text))
 			{
-				MessageBox.Show("Bạn chưa nhập thay đổi!");
+				MessageBox.Show("Bạn chưa nhập thông tin cần thay đổi!");
 				return;
 			}
 			else
 			{
-				DataProvider.Instance.ExecuteQuery("Update foodcategory set Name = N'"
-				+ txtCategoryName.Text + "' where id = " + int.Parse(txtCategoryID.Text) + "");
-				LoadCategoryList();
+				try
+				{
+					// Tạo đối tượng category từ thông tin cần chỉnh sửa
+					var category = new
+					{
+						id = int.Parse(txtCategoryID.Text),
+						name = txtCategoryName.Text
+					};
+
+					// Chuyển đối tượng category thành chuỗi JSON
+					string jsonCategory = JsonConvert.SerializeObject(category);
+
+					// Tạo đường dẫn API và HttpClient
+					string apiUrl = "http://127.0.0.1:3333/category/edit";
+					HttpClient client = new HttpClient();
+
+					// Tạo nội dung yêu cầu PUT với dữ liệu JSON
+					var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
+
+					// Gửi yêu cầu PUT đến API
+					HttpResponseMessage response = await client.PutAsync(apiUrl, content);
+
+					// Đọc nội dung phản hồi từ máy chủ Python
+					string responseContent = await response.Content.ReadAsStringAsync();
+
+					// Xác định xem yêu cầu đã thành công hay không
+					if (response.IsSuccessStatusCode)
+					{
+						dynamic responseData = JsonConvert.DeserializeObject(responseContent);
+						string message = responseData.mess;
+						if (message == "Thành công")
+						{
+							MessageBox.Show("Sửa danh mục thành công");
+							LoadCategoryList(); // Load lại danh sách danh mục sau khi chỉnh sửa thành công
+							FillCategoryIntoCombobox();
+						}
+						else if (message == "Đã có danh mục này")
+						{
+							MessageBox.Show("Đã có danh mục này!");
+						}
+					}
+					else
+					{
+						MessageBox.Show("Lỗi không thể chỉnh sửa danh mục: " + responseContent);
+					}
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show("Không thể chỉnh sửa danh mục vì " + ex.Message);
+				}
 			}
+			//if (txtCategoryID.Text == "" && txtCategoryName.Text == "")
+			//{
+			//	MessageBox.Show("Bạn chưa nhập thay đổi!");
+			//	return;
+			//}
+			//else
+			//{
+			//	DataProvider.Instance.ExecuteQuery("Update foodcategory set Name = N'"
+			//	+ txtCategoryName.Text + "' where id = " + int.Parse(txtCategoryID.Text) + "");
+			//	LoadCategoryList();
+			//}
 		}
-		private void btnDeleteCategory_Click(object sender, EventArgs e)
+		// delete category
+		private async void btnDeleteCategory_Click(object sender, EventArgs e)
 		{
-			if (txtCategoryID.Text == "" && txtCategoryName.Text == "")
+			if (string.IsNullOrWhiteSpace(txtCategoryID.Text) || string.IsNullOrWhiteSpace(txtCategoryName.Text))
 			{
 				MessageBox.Show("Bạn chưa chọn danh mục muốn xóa!");
 				return;
 			}
 			else
 			{
-				DataTable result = DataProvider.Instance.ExecuteQuery("Select * from food Where idCategory = " + txtCategoryID.Text + "");
-				if (result.Rows.Count == 0)
+				try
 				{
+					// Gửi yêu cầu DELETE đến API
+					
 					if (MessageBox.Show("Bạn có thực sự muốn xóa danh mục này?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 					{
-						DataProvider.Instance.ExecuteQuery("Delete from foodcategory Where id = " + txtCategoryID.Text + " AND name = N'" + txtCategoryName.Text + "'");
-					}
-					else
-					{
-						return;
-					}
-					LoadCategoryList();
+						string apiUrl = "http://127.0.0.1:3333/category/delete?id=" + txtCategoryID.Text + "&name=" + txtCategoryName.Text;
+						HttpResponseMessage response = await client.DeleteAsync(apiUrl);
+						// Đọc nội dung phản hồi từ máy chủ Python
+						string responseContent = await response.Content.ReadAsStringAsync();
+
+						// Xác định xem yêu cầu đã thành công hay không
+						if (response.IsSuccessStatusCode)
+						{
+							dynamic responseData = JsonConvert.DeserializeObject(responseContent);
+							string message = responseData.mess;
+							if (message == "Thành công")
+							{
+								MessageBox.Show("Xoá danh mục thành công");
+								LoadCategoryList(); // Load lại danh sách danh mục sau khi chỉnh sửa thành công
+								FillCategoryIntoCombobox();
+							}
+							else if (message == "Danh mục này đã có món")
+							{
+								MessageBox.Show("Danh mục này không được xoá");
+							}
+						}
+						else
+						{
+							MessageBox.Show("Lỗi không thể xóa danh mục: " + responseContent);
+						}
+					}	
+					
 				}
-				else
+				catch (Exception ex)
 				{
-					MessageBox.Show("Danh mục này đã có sản phẩm");
-					return;
+					MessageBox.Show("Không thể xóa danh mục vì " + ex.Message);
 				}
 			}
+			//if (txtCategoryID.Text == "" && txtCategoryName.Text == "")
+			//{
+			//	MessageBox.Show("Bạn chưa chọn danh mục muốn xóa!");
+			//	return;
+			//}
+			//else
+			//{
+			//	DataTable result = DataProvider.Instance.ExecuteQuery("Select * from food Where idCategory = " + txtCategoryID.Text + "");
+			//	if (result.Rows.Count == 0)
+			//	{
+			//		if (MessageBox.Show("Bạn có thực sự muốn xóa danh mục này?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+			//		{
+			//			DataProvider.Instance.ExecuteQuery("Delete from foodcategory Where id = " + txtCategoryID.Text + " AND name = N'" + txtCategoryName.Text + "'");
+			//		}
+			//		else
+			//		{
+			//			return;
+			//		}
+			//		LoadCategoryList();
+			//	}
+			//	else
+			//	{
+			//		MessageBox.Show("Danh mục này đã có sản phẩm");
+			//		return;
+			//	}
+			//}
 
 		}
 		private void btnShowFood_Click(object sender, EventArgs e)
@@ -313,62 +436,194 @@ namespace ManageCafe
 		{
 			txtFoodID.Text = dtgvFood.CurrentRow.Cells[0].Value.ToString();
 			txtFoodName.Text = dtgvFood.CurrentRow.Cells[1].Value.ToString();
-			cbFoodCategory.SelectedValue = dtgvFood.CurrentRow.Cells[2].Value.ToString();
-			nmFoodPrice.Text = dtgvFood.CurrentRow.Cells[3].Value.ToString();
+			nmFoodPrice.Text = dtgvFood.CurrentRow.Cells[2].Value.ToString();
+			cbFoodCategory.SelectedValue = dtgvFood.CurrentRow.Cells[3].Value.ToString();
+
 		}
-		private void btnAddFood_Click(object sender, EventArgs e)
+		private async void btnAddFood_Click(object sender, EventArgs e)
 		{
-			DataTable check = DataProvider.Instance.ExecuteQuery("Select * from food Where name = N'" + txtFoodName.Text + "'");
-			if (check.Rows.Count == 0) // Chua co ma name foodcategory do
+			try
 			{
-				if (txtFoodName.Text == "")
+				if (string.IsNullOrWhiteSpace(txtFoodName.Text))
 				{
 					MessageBox.Show("Bạn chưa nhập tên thức ăn!");
 					txtFoodName.Focus();
+					return;
 				}
 				else if (cbFoodCategory.SelectedValue == null)
 				{
 					MessageBox.Show("Bạn chưa chọn danh mục thức ăn!");
 					cbFoodCategory.Focus();
+					return;
 				}
 				else if (nmFoodPrice.Value == 0)
 				{
 					MessageBox.Show("Bạn chưa chọn giá thức ăn!");
 					nmFoodPrice.Focus();
+					return;
 				}
-				else
+
+				// Tạo đối tượng food từ thông tin món ăn
+				var newFood = new
 				{
-					string code = "Insert into food(name,idcategory,price) values (N'" + txtFoodName.Text + "','" + cbFoodCategory.SelectedValue + "','" + nmFoodPrice.Value + "')";
-					/* DataProvider.Instance.ExecuteQuery(code);
-					 LoadFoodList();*/
-					int result = DataProvider.Instance.ExecuteNonQuery(code);
-					if (result > 0)
+					name = txtFoodName.Text,
+					idCategory = cbFoodCategory.SelectedValue,
+					price = nmFoodPrice.Value
+				};
+
+				// Chuyển đối tượng food thành chuỗi JSON
+				string jsonFood = JsonConvert.SerializeObject(newFood);
+
+				// Tạo đường dẫn API và HttpClient
+				string apiUrl = "http://127.0.0.1:3333/food/insert";
+
+				// Tạo nội dung yêu cầu POST với dữ liệu JSON
+				var content = new StringContent(jsonFood, Encoding.UTF8, "application/json");
+
+				// Gửi yêu cầu POST đến API
+				HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+				// Đọc nội dung phản hồi từ máy chủ Python
+				string responseContent = await response.Content.ReadAsStringAsync();
+
+				// Xác định xem yêu cầu đã thành công hay không
+				if (response.IsSuccessStatusCode)
+				{
+					dynamic responseData = JsonConvert.DeserializeObject(responseContent);
+					string message = responseData.mess;
+					if (message == "Thành công")
 					{
-						MessageBox.Show("Thêm food thành công");
-						return;
+						MessageBox.Show("Thêm Food thành công");
+					}
+					else if (message == "Tên thức ăn đã tồn tại!")
+					{
+						MessageBox.Show("Đã có Food này!");
 					}
 					else
 					{
-						MessageBox.Show("Lỗi không thể thêm food mới");
-						return;
+						MessageBox.Show("Lỗi không thể thêm Food mới");
 					}
-
+					LoadFoodList();
+				}
+				else
+				{
+					MessageBox.Show("Lỗi không thể thêm món ăn mới: " + responseContent);
 				}
 			}
-		}
-		private void btnEditFood_Click(object sender, EventArgs e)
-		{
-			if (txtFoodName.Text == "" || nmFoodPrice.Value == null)
+			catch (Exception ex)
 			{
-				MessageBox.Show("Bạn chưa nhập thay đổi!");
+				MessageBox.Show("Không thể thêm món ăn mới vì " + ex.Message);
+			}
+			//DataTable check = DataProvider.Instance.ExecuteQuery("Select * from food Where name = N'" + txtFoodName.Text + "'");
+			//if (check.Rows.Count == 0) // Chua co ma name foodcategory do
+			//{
+			//	if (txtFoodName.Text == "")
+			//	{
+			//		MessageBox.Show("Bạn chưa nhập tên thức ăn!");
+			//		txtFoodName.Focus();
+			//	}
+			//	else if (cbFoodCategory.SelectedValue == null)
+			//	{
+			//		MessageBox.Show("Bạn chưa chọn danh mục thức ăn!");
+			//		cbFoodCategory.Focus();
+			//	}
+			//	else if (nmFoodPrice.Value == 0)
+			//	{
+			//		MessageBox.Show("Bạn chưa chọn giá thức ăn!");
+			//		nmFoodPrice.Focus();
+			//	}
+			//	else
+			//	{
+			//		string code = "Insert into food(name,idcategory,price) values (N'" + txtFoodName.Text + "','" + cbFoodCategory.SelectedValue + "','" + nmFoodPrice.Value + "')";
+			//		/* DataProvider.Instance.ExecuteQuery(code);
+			//		 LoadFoodList();*/
+			//		int result = DataProvider.Instance.ExecuteNonQuery(code);
+			//		if (result > 0)
+			//		{
+			//			MessageBox.Show("Thêm food thành công");
+			//			return;
+			//		}
+			//		else
+			//		{
+			//			MessageBox.Show("Lỗi không thể thêm food mới");
+			//			return;
+			//		}
+
+			//	}
+			//}
+		}
+		private async void btnEditFood_Click(object sender, EventArgs e)
+		{
+			if (string.IsNullOrWhiteSpace(txtFoodName.Text) || string.IsNullOrWhiteSpace(nmFoodPrice.Value.ToString()) || string.IsNullOrWhiteSpace(cbFoodCategory.Text) || string.IsNullOrWhiteSpace(txtFoodID.Text))
+			{
+				MessageBox.Show("Bạn chưa nhập thông tin cần thay đổi!");
 				return;
 			}
 			else
 			{
-				DataProvider.Instance.ExecuteQuery("Update food set name = N'"
-				+ txtFoodName.Text + "', idCategory = " + cbFoodCategory.SelectedValue + ", price = " + nmFoodPrice.Value + " where id = " + txtFoodID.Text + "");
-				LoadFoodList();
+				try
+				{
+					// Tạo đối tượng category từ thông tin cần chỉnh sửa
+					var newFood = new
+					{
+						name = txtFoodName.Text,
+						idCategory = cbFoodCategory.SelectedValue,
+						price = nmFoodPrice.Value,
+						id = txtFoodID.Text,
+					};
+
+					// Chuyển đối tượng category thành chuỗi JSON
+					string jsonCategory = JsonConvert.SerializeObject(newFood);
+
+					// Tạo đường dẫn API và HttpClient
+					string apiUrl = "http://127.0.0.1:3333/food/edit";
+					HttpClient client = new HttpClient();
+
+					// Tạo nội dung yêu cầu PUT với dữ liệu JSON
+					var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
+
+					// Gửi yêu cầu PUT đến API
+					HttpResponseMessage response = await client.PutAsync(apiUrl, content);
+
+					// Đọc nội dung phản hồi từ máy chủ Python
+					string responseContent = await response.Content.ReadAsStringAsync();
+
+					// Xác định xem yêu cầu đã thành công hay không
+					if (response.IsSuccessStatusCode)
+					{
+						dynamic responseData = JsonConvert.DeserializeObject(responseContent);
+						string message = responseData.mess;
+						if (message == "Thành công")
+						{
+							MessageBox.Show("Sửa món thành công");
+							LoadFoodList(); // Load lại danh sách danh mục sau khi chỉnh sửa thành công
+						}
+						else if (message == "Đã có món này")
+						{
+							MessageBox.Show("Đã có món này");
+						}
+					}
+					else
+					{
+						MessageBox.Show("Lỗi không thể chỉnh sửa Food: " + responseContent);
+					}
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show("Không thể chỉnh sửa Food vì " + ex.Message);
+				}
 			}
+			//if (txtFoodName.Text == "" || nmFoodPrice.Value == null)
+			//{
+			//	MessageBox.Show("Bạn chưa nhập thay đổi!");
+			//	return;
+			//}
+			//else
+			//{
+			//	DataProvider.Instance.ExecuteQuery("Update food set name = N'"
+			//	+ txtFoodName.Text + "', idCategory = " + cbFoodCategory.SelectedValue + ", price = " + nmFoodPrice.Value + " where id = " + txtFoodID.Text + "");
+			//	LoadFoodList();
+			//}
 		}
 		private void btnDeleteFood_Click(object sender, EventArgs e)
 		{
@@ -412,6 +667,7 @@ namespace ManageCafe
 		}
 		private void btnAddTable_Click(object sender, EventArgs e)
 		{
+
 			DataTable check = DataProvider.Instance.ExecuteQuery("Select * from tablefood where name = N'" + txtTableName.Text + "'");
 			if (check.Rows.Count == 0)
 			{
@@ -569,5 +825,7 @@ namespace ManageCafe
 			}
 		}
 		#endregion
+
+		
 	}
 }

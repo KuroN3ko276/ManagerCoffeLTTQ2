@@ -309,10 +309,10 @@
 			// 
 			this.nmFoodPrice.Location = new System.Drawing.Point(95, 19);
 			this.nmFoodPrice.Maximum = new decimal(new int[] {
-			1000000,
-			0,
-			0,
-			0});
+            1000000,
+            0,
+            0,
+            0});
 			this.nmFoodPrice.Name = "nmFoodPrice";
 			this.nmFoodPrice.Size = new System.Drawing.Size(241, 27);
 			this.nmFoodPrice.TabIndex = 1;
@@ -561,6 +561,8 @@
 			this.btnAddCategory.TabIndex = 0;
 			this.btnAddCategory.Text = "Thêm";
 			this.btnAddCategory.UseVisualStyleBackColor = true;
+			this.btnAddCategory.Click += new System.EventHandler(this.btnAddCategory_Click);
+
 			// 
 			// panel12
 			// 
@@ -681,8 +683,8 @@
 			// 
 			this.cbTableStatus.FormattingEnabled = true;
 			this.cbTableStatus.Items.AddRange(new object[] {
-			"Có người",
-			"Trống"});
+            "Có người",
+            "Trống"});
 			this.cbTableStatus.Location = new System.Drawing.Point(124, 14);
 			this.cbTableStatus.Name = "cbTableStatus";
 			this.cbTableStatus.Size = new System.Drawing.Size(253, 27);
@@ -887,10 +889,10 @@
 			// 
 			this.nmTypeAccount.Location = new System.Drawing.Point(141, 14);
 			this.nmTypeAccount.Maximum = new decimal(new int[] {
-			1,
-			0,
-			0,
-			0});
+            1,
+            0,
+            0,
+            0});
 			this.nmTypeAccount.Name = "nmTypeAccount";
 			this.nmTypeAccount.Size = new System.Drawing.Size(120, 27);
 			this.nmTypeAccount.TabIndex = 1;
@@ -1010,7 +1012,7 @@
 			this.btnAddAccount.UseVisualStyleBackColor = true;
 			this.btnAddAccount.Click += new System.EventHandler(this.btnAddAccount_Click);
 			// 
-			// btnAddCategory_Click
+			// fAdmin
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1018,7 +1020,7 @@
 			this.Controls.Add(this.tcAdmin);
 			this.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-			this.Name = "btnAddCategory_Click";
+			this.Name = "fAdmin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "fAdmin";
 			this.tcAdmin.ResumeLayout(false);
