@@ -77,6 +77,7 @@ try:
             price = flask.request.json.get('price')
             idFood = flask.request.json.get('id')
             cursor = conn.cursor()
+
             sql_check = 'SELECT COUNT(*) FROM Food WHERE name = ?'
             cursor.execute(sql_check, (foodName,))
             result = cursor.fetchone()[0]
@@ -94,6 +95,33 @@ try:
                 return resp
         except:
             return flask.jsonify({"mess": str(e)})
+    #Delete Food
+    @app.route('/food/delete', methods=['DELETE'])
+    def DeleteFood():
+        try:
+            idFood = flask.request.args.get('id')
+            foodName = flask.request.args.get('name')
+            cursor = conn.cursor()
+            sql_check = 'SELECT COUNT(*) FROM BillInfo WHERE idFood = ?'
+            cursor.execute(sql_check, (idFood,))
+            result = cursor.fetchone()[0]
+            
+            if result > 0:
+                # Nếu danh mục đã tồn tại, trả về thông báo tương ứng
+                return flask.jsonify({"mess": "Món này không được xoá vì đã lên bill"})
+            else:
+                sql = 'Delete from food Where id = ? AND name = ?'
+                data = (idFood, foodName)
+
+                cursor.execute(sql, data)
+                conn.commit()
+
+                resp = flask.jsonify({"mess": "Thành công"})
+                resp.status_code = 200
+                return resp
+        except Exception as e:
+            return flask.jsonify({"mess": "Xảy ra lỗi khi xóa món ăn: " + str(e)})
+
     # insert category
     @app.route('/category/insertCategory', methods=['POST'])
     def insertCategory():
@@ -164,6 +192,138 @@ try:
                 return resp
         except:
             return flask.jsonify({"mess": str(e)})
+    #InsertTable
+    @app.route('/table/insert', methods=['POST'])
+    def insertTable():
+        try:
+            tableName = flask.request.json.get('name')
+            tableStatus = flask.request.json.get('status')
+            cursor = conn.cursor()
+            sql_check = 'SELECT COUNT(*) FROM TableFood WHERE name = ?'
+            cursor.execute(sql_check, (tableName,))
+            result = cursor.fetchone()[0]
+            if result > 0:
+                # Nếu danh mục đã tồn tại, trả về thông báo tương ứng
+                return flask.jsonify({"mess": "Đã có bàn này"})
+            else:
+                sql = 'insert into TableFood (name,status) values (?,?)'
+                data = (tableName,tableStatus)
+                cursor.execute(sql, data)
+                conn.commit()
+                resp = flask.jsonify({"mess": "Thành công"})
+                resp.status_code = 200
+                return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})
+    
+    #EditTable
+    @app.route('/table/edit',methods = ['PUT'])
+    def EditTable():
+        try:
+            tableName = flask.request.json.get('name')
+            idTable = flask.request.json.get('id')
+            cursor = conn.cursor()
+            sql_check = 'SELECT COUNT(*) FROM TableFood WHERE name = ? and id = ?'
+            cursor.execute(sql_check, (tableName,idTable))
+            result = cursor.fetchone()[0]
+            if result > 0 :
+                return flask.jsonify({"mess": "Đã có bàn này"})
+            else:
+                sql = 'Update TableFood set name = ? where id = ?'
+                data = (tableName,idTable)
+                cursor.execute(sql, data)
+                conn.commit()
+                resp = flask.jsonify({"mess": "Thành công"})
+                resp.status_code = 200
+                return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+    
+    #DeleteTable
+    @app.route('/table/delete',methods = ['DELETE'])
+    def DeleteTable():
+        try:
+            idTable = flask.request.args.get('id')
+            tableName = flask.request.args.get('name')
+            cursor = conn.cursor()
+            sql_check = 'SELECT COUNT(*) FROM Bill WHERE idTable = ?'
+            cursor.execute(sql_check, (idTable))
+            result = cursor.fetchone()[0]
+            
+            if result > 0:
+                return flask.jsonify({"mess": "Bàn này đã có bill"})
+            else:
+                sql = 'Delete from tablefood Where id = ? AND name = ?'
+                data = (idTable,tableName)
+                cursor.execute(sql, data)
+                conn.commit()
+                resp = flask.jsonify({"mess": "Thành công"})
+                resp.status_code = 200
+                return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+       
+    #InsertAccount
+    @app.route('/account/insert', methods=['POST'])
+    def insertAccount():
+        try:
+            userName = flask.request.json.get('UserName')
+            displayName = flask.request.json.get('DisplayName')
+            passWord = flask.request.json.get('PassWord')
+            typeAccount = flask.request.json.get('type')
+            cursor = conn.cursor()
+            sql_check = 'SELECT COUNT(*) FROM Account WHERE UserName = ?'
+            cursor.execute(sql_check, (userName,))
+            result = cursor.fetchone()[0]
+            if result > 0:
+                return flask.jsonify({"mess": "Đã có tài khoản này"})
+            else:
+                sql = 'Insert into Account(username,displayname,password,type) values(?,?,?,?)'
+                data = (userName,displayName,passWord,typeAccount)
+                cursor.execute(sql, data)
+                conn.commit()
+                resp = flask.jsonify({"mess": "Thành công"})
+                resp.status_code = 200
+                return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})
+    
+    #EditAccount
+    @app.route('/account/edit',methods = ['PUT'])
+    def EditAccount():
+        try:
+            userName = flask.request.json.get('UserName')
+            displayName = flask.request.json.get('DisplayName')
+            passWord = flask.request.json.get('PassWord')
+            typeAccount = flask.request.json.get('type')
+            cursor = conn.cursor()
+    
+            sql = 'Update Account set displayname = ?,password =?, type = ? Where username = ? '
+            data = (displayName,passWord,typeAccount,userName)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+    
+    #DeleteAccount
+    @app.route('/account/delete',methods = ['DELETE'])
+    def DeleteAccount():
+        try:
+            userName = flask.request.args.get('UserName')
+            cursor = conn.cursor()
+            sql = 'Delete from Account Where UserName = ?'
+            data = (userName,)
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = flask.jsonify({"mess": "Thành công"})
+            resp.status_code = 200
+            return resp
+        except:
+            return flask.jsonify({"mess": str(e)})
+    
     # Insert Bill
     @app.route('/bill/insert', methods=['POST'])
     def insertBill():
