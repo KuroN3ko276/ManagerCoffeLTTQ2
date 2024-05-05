@@ -562,7 +562,6 @@
 			this.btnAddCategory.Text = "Thêm";
 			this.btnAddCategory.UseVisualStyleBackColor = true;
 			this.btnAddCategory.Click += new System.EventHandler(this.btnAddCategory_Click);
-
 			// 
 			// panel12
 			// 
