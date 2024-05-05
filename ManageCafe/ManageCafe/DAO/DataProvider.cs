@@ -13,7 +13,7 @@ namespace ManageCafe.DAO
 
 		private static DataProvider instance;
 
-		private string connectionStr = "Data Source=CAU-CHINH\\SQLEXPRESS;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";
+		private string connectionStr = "Data Source=MYPC\\SQLEXPRESS01;Initial Catalog=QLCoffeLTTQ;Integrated Security=True";
 
 		public static DataProvider Instance 
 		{

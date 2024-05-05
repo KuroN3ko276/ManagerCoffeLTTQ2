@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 
 con_str = (
     "Driver={SQL Server};"
-    "Server=CAU-CHINH\SQLEXPRESS;"
+    "Server=MYPC\SQLEXPRESS01;"
     "Database=QLCoffeLTTQ;"
     "Trusted_Connection=yes;"
 )
@@ -641,7 +641,7 @@ try:
     @app.route('/food/getlistfoodbycategory', methods=['GET'])
     def getListFoodByCategory():
         try:
-            idCategory = flask.request.json.get('idCategory')
+            idCategory = flask.request.args.get('idCategory')
             cursor = conn.cursor()
             sql = "select * from food where idCategory = ?"
             data = (idCategory,)
