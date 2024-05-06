@@ -34,9 +34,9 @@ namespace ManageCafe.DTO
 		private string name;
 		public Menu() { }
 
-		public string FoodName { get => name; set => name = value; }
-		public int Count { get => count; set => count = value; }
-		public float Price { get => price; set => price = value; }
-		public float Totalprice { get => totalPrice; set => totalPrice = value; }
+		public string Name { get; set; }
+		public int Count { get; set; }
+		public float Price { get; set; }
+		public float Totalprice { get; set; }
 	}
 }

@@ -85,7 +85,7 @@ namespace ManageCafe
 			float totalPrice = 0;
 			foreach (ManageCafe.DTO.Menu item in listMenu)
 			{
-				ListViewItem lsvItem = new ListViewItem(item.FoodName.ToString());
+				ListViewItem lsvItem = new ListViewItem(item.Name.ToString());
 				lsvItem.SubItems.Add(item.Count.ToString());
 				lsvItem.SubItems.Add(item.Price.ToString());
 				lsvItem.SubItems.Add(item.Totalprice.ToString());

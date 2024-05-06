@@ -1,16 +1,23 @@
 ﻿using ManageCafe.DTO;
+using MySqlX.XDevAPI.Relational;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace ManageCafe.DAO
 {
 	internal class AccountDAO
 	{
 		private static AccountDAO instance;
+		private static readonly String APILink = "http://127.0.0.1:3333/";
+		private static readonly HttpClient client = new HttpClient();
 
 		public static AccountDAO Instance
 		{
@@ -22,26 +29,73 @@ namespace ManageCafe.DAO
 
 		public bool Login(string username, string password)
 		{
-			string query = "USP_Login @username , @password ";
-			DataTable result = DataProvider.Instance.ExecuteQuery(query, new object[]{ username,password});
-			return result.Rows.Count > 0; ;
-		}
+			Account account = new Account();
+			var newAccount = new
+			{
+				UserName = username,
+				PassWord = password
+			};
 
+			string jsonLogin = JsonConvert.SerializeObject(newAccount);
+
+			string apiUrl = "http://127.0.0.1:3333/account/login";
+			HttpClient client = new HttpClient();
+			var content = new StringContent(jsonLogin, Encoding.UTF8, "application/json");
+			HttpResponseMessage response = client.PostAsync(apiUrl, content).Result;
+			if (response.IsSuccessStatusCode)
+			{
+				string responseContent = response.Content.ReadAsStringAsync().Result;
+				account = JsonConvert.DeserializeObject<Account>(responseContent);
+			}
+			return account.UserName != null;
+		}
 		public Account GetAccountByUsername(string username)
 		{
-			DataTable data = DataProvider.Instance.ExecuteQuery("select * from Account where username = '"+username+"'");
-			foreach(DataRow row in data.Rows)
+			Account account = new Account();
+			var newAccount = new
 			{
-				return new Account(row);
+				UserName = username,
+			};
+
+			string jsonLogin = JsonConvert.SerializeObject(newAccount);
+
+			string apiUrl = "http://127.0.0.1:3333/account/getaccountbyusername";
+			HttpClient client = new HttpClient();
+			var content = new StringContent(jsonLogin, Encoding.UTF8, "application/json");
+			HttpResponseMessage response = client.PostAsync(apiUrl, content).Result;
+			if (response.IsSuccessStatusCode)
+			{
+				string responseContent = response.Content.ReadAsStringAsync().Result;
+				account = JsonConvert.DeserializeObject<Account>(responseContent);
+				return account;
 			}
 			return null;
 		}
 
 		public bool UpdateAccount(string userName, string displayName, string pass, string newPass)
 		{
-			int result = DataProvider.Instance.ExecuteNonQuery("exec USP_UpdateAccount @userName , @displayName , @password , @newPassword", new object[] { userName, displayName, pass, newPass });
+			Account account = new Account();
+			var newAccount = new
+			{
+				UserName = userName,
+				DisplayName = displayName,
+				PassWord = pass,
+				NewPassword = newPass
+			};
 
-			return result > 0;
+			string jsonLogin = JsonConvert.SerializeObject(newAccount);
+
+			string apiUrl = "http://127.0.0.1:3333/account/updateaccount";
+			HttpClient client = new HttpClient();
+			var content = new StringContent(jsonLogin, Encoding.UTF8, "application/json");
+			HttpResponseMessage response = client.PutAsync(apiUrl, content).Result;
+			if (response.IsSuccessStatusCode)
+			{
+				string responseContent = response.Content.ReadAsStringAsync().Result;
+				account = JsonConvert.DeserializeObject<Account>(responseContent);
+			}
+			return response.IsSuccessStatusCode;
+		
 		}
 	}
 }

@@ -24,10 +24,10 @@ namespace ManageCafe.DAO
 		}
 		public MenuDAO() { }
 
-		public List<Menu> GetListMenuByTable(int tableID) //Lay hoa don tu ID Ban
+		public List<Menu> GetListMenuByTable(int idTable) //Lay hoa don tu ID Ban
 		{
 			List<Menu> listMenu = new List<Menu>();
-            String query = $"menu/getlistmenubytable?idTable={tableID}";
+            String query = $"menu/getlistmenubytable?idTable={idTable}";
             HttpResponseMessage response = client.GetAsync(APILink + query).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -45,7 +45,9 @@ namespace ManageCafe.DAO
 
             //}
 
-            return listMenu;
+			
+			return listMenu;
+
 		}
 	}
 }
