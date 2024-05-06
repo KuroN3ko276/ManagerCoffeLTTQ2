@@ -1,11 +1,14 @@
 ﻿using ManageCafe.DTO;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace ManageCafe.DAO
 {
@@ -23,13 +26,32 @@ namespace ManageCafe.DAO
 
 		public int GetBillIDByTableID(int id)
 		{
-			DataTable data = DataProvider.Instance.ExecuteQuery("SELECT * FROM dbo.Bill WHERE idTable = " + id + " AND status = 0");
-			if(data.Rows.Count > 0) 
+			Bill bill = new Bill();
+			var newBill = new
 			{
-				Bill bill = new Bill(data.Rows[0]);
+				idTable = id
+			};
+
+			string jsonLogin = JsonConvert.SerializeObject(newBill);
+
+			string apiUrl = "http://127.0.0.1:3333/bill/getnumbillbytableid";
+			HttpClient client = new HttpClient();
+			var content = new StringContent(jsonLogin, Encoding.UTF8, "application/json");
+			HttpResponseMessage response = client.PostAsync(apiUrl, content).Result;
+			if (response.IsSuccessStatusCode)
+			{
+				string responseContent = response.Content.ReadAsStringAsync().Result;
+				bill = JsonConvert.DeserializeObject<Bill>(responseContent);
 				return bill.ID;
 			}
 			return -1;
+			//DataTable data = DataProvider.Instance.ExecuteQuery("SELECT * FROM dbo.Bill WHERE idTable = " + id + " AND status = 0");
+			//if(data.Rows.Count > 0) 
+			//{
+			//	Bill bill = new Bill(data.Rows[0]);
+			//	return bill.ID;
+			//}
+			//return -1;
 		}
 
 		public void InsertBill(int idTable)		//thêm bill theo idTable

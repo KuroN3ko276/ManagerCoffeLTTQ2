@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,9 +12,10 @@ namespace ManageCafe.DAO
 	public class CategoryDAO
 	{
 		private static CategoryDAO instance;
+        private static readonly string getAllCategory = "http://127.0.0.1:3333/category/getlistcategory";
+        private static readonly HttpClient client = new HttpClient();
 
-
-		private CategoryDAO() { }
+        private CategoryDAO() { }
 
 		public static CategoryDAO Instance
 		{
@@ -23,18 +26,26 @@ namespace ManageCafe.DAO
 		public List<Category> GetListCategory()
 		{
 			List<Category> list = new List<Category>();
+            HttpResponseMessage response =  client.GetAsync(getAllCategory).Result;
 
-			string query = "SELECT * FROM dbo.FoodCategory";
+            if (response.IsSuccessStatusCode)
+            {
+                var content =  response.Content.ReadAsStringAsync().Result;
+                list = JsonConvert.DeserializeObject<List<Category>>(content);
+               
+            }
 
-			DataTable data = DataProvider.Instance.ExecuteQuery(query);
+            //string query = "SELECT * FROM dbo.FoodCategory";
 
-			foreach (DataRow item in data.Rows)
-			{
-				Category category = new Category(item);
-				list.Add(category);
-			}
+            //DataTable data = DataProvider.Instance.ExecuteQuery(query);
 
-			return list;
+            //foreach (DataRow item in data.Rows)
+            //{
+            //	Category category = new Category(item);
+            //	list.Add(category);
+            //}
+
+            return list;
 		}
 	}
 }
