@@ -622,7 +622,7 @@ try:
     @app.route('/menu/getlistmenubytable', methods=['GET'])
     def getListMenuByTable():
         try:
-            idTable = flask.request.json.get('idTable')
+            idTable = flask.request.args.get('idTable')
             cursor = conn.cursor()
             sql = "SELECT f.name, bi.count, f.price, f.price* bi.count AS totalPrice FROM dbo.BillInfo AS bi, dbo.Bill AS b, dbo.Food AS f WHERE bi.idBill = b.id AND bi.idFood = f.id AND b.status=0 AND b.idTable = ?"
             data = (idTable,)
