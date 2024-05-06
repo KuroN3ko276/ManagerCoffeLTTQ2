@@ -14,15 +14,20 @@ using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using static ManageCafe.fAccountProfile;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace ManageCafe
 {
 	public partial class fTableManage : Form
 	{
 		private Account loginAccount;
+        
+        
 
-		public Account LoginAccount
+        public Account LoginAccount
 		{
+
 			get { return loginAccount; }
 			set { loginAccount = value; changeAcccount(loginAccount.Type); }
 		}
@@ -37,10 +42,10 @@ namespace ManageCafe
 			LoadCategory();
 			LoadComboboxTable(cbSwitchTable);
 		}
+     
 
-
-		#region Methods
-		void changeAcccount(int type)
+        #region Methods
+        void changeAcccount(int type)
 		{
 			adminToolStripMenuItem.Enabled = type == 1;
 			thôngTinTàiKhoảnToolStripMenuItem.Text += " (" + LoginAccount.DisplayName + ")";
@@ -49,6 +54,7 @@ namespace ManageCafe
 
 		void LoadTable()
 		{
+
 			flpTable.Controls.Clear();
 			List<Table> tableList = TableDAO.Instance.LoadTableList();
 			foreach (Table table in tableList)
