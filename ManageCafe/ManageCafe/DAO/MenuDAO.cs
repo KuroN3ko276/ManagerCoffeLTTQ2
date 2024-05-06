@@ -34,7 +34,6 @@ namespace ManageCafe.DAO
 				listMenu.Add(menu);
 
 			}
-
 			return listMenu;
 		}
 	}
