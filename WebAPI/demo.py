@@ -359,7 +359,7 @@ try:
             return flask.jsonify({"mess": str(e)})
         
     #Get Account By UserName
-    @app.route('/account/getaccountbyusername', methods = ['GET'])
+    @app.route('/account/getaccountbyusername', methods = ['POST'])
     def getAccountByUserName():
         try:
             username = flask.request.json.get('UserName')
@@ -370,7 +370,7 @@ try:
             results = []
             keys = [i[0] for i in cursor.description]
             for row in cursor.fetchall():
-                results.append(dict(zip(keys, row)))
+                results=dict(zip(keys, row))
             resp = flask.jsonify(results)
             resp.status_code = 200
             return resp
@@ -439,7 +439,7 @@ try:
             return flask.jsonify({"mess": str(e)})
     
     #GetNumBillByDate
-    @app.route('/bill/getnumbillbydate', methods = ['GET'])
+    @app.route('/bill/getnumbillbydate', methods = ['POST'])
     def getNumBillByDate():
         try:
             checkIn = flask.request.json.get('checkIn')
@@ -459,7 +459,7 @@ try:
             return flask.jsonify({"mess": str(e)})
     
     #GetBillByTableID
-    @app.route('/bill/getnumbillbytableid', methods = ['GET'])
+    @app.route('/bill/getnumbillbytableid', methods = ['POST'])
     def getNumBillByTableId():
         try:
             tableId = flask.request.json.get('idTable')
@@ -470,7 +470,7 @@ try:
             results = []
             keys = [i[0] for i in cursor.description]
             for row in cursor.fetchall():
-                results.append(dict(zip(keys, row)))
+                results=dict(zip(keys, row))
             resp = flask.jsonify(results)
             resp.status_code = 200
             return resp
@@ -527,7 +527,7 @@ try:
             return flask.jsonify({"mess": str(e)})
     
     #Login
-    @app.route('/account/login', methods = ['GET'])
+    @app.route('/account/login', methods = ['POST'])
     def loginAccount():
         try:
             userName = flask.request.json.get('UserName')
@@ -536,10 +536,10 @@ try:
             sql = "exec USP_Login @username = ? , @password = ?"
             data = (userName, passWord)
             cursor.execute(sql, data)
-            results = []
+            results = {}
             keys = [i[0] for i in cursor.description]
             for row in cursor.fetchall():
-                results.append(dict(zip(keys, row)))
+                results=dict(zip(keys, row))
             resp = flask.jsonify(results)
             resp.status_code = 200
             return resp

@@ -117,10 +117,10 @@ namespace ManageCafe
 			cb.DisplayMember = "Name";
 		}
 
-		void ExportFileExcel()
+		async void ExportFileExcel()
 		{
 			Table table = lsvBill.Tag as Table;
-			int idBill = BillDAO.Instance.GetBillIDByTableID(table.ID);
+			int idBill = await BillDAO.Instance.GetBillIDByTableID(table.ID);
 			int discount = (int)nmDiscount.Value;
 
 			double totalPrice = Convert.ToDouble(txbTotalPrice.Text.Split(',')[0].Replace(".", ""));
@@ -249,11 +249,11 @@ namespace ManageCafe
 			LoadFoodListByCategoryID(id);
 		}
 
-		private void btnAddFood_Click(object sender, EventArgs e)
+		private async void btnAddFood_Click(object sender, EventArgs e)
 		{
 			Table table = lsvBill.Tag as Table;
 
-			int idBill = BillDAO.Instance.GetBillIDByTableID(table.ID);
+			int idBill = await BillDAO.Instance.GetBillIDByTableID(table.ID);
 			int foodID = (cbFood.SelectedItem as Food).ID;
 			int count = (int)nmFoodCount.Value;
 
@@ -269,10 +269,10 @@ namespace ManageCafe
 			showBill(table.ID);
 			LoadTable();
 		}
-		private void btnCheckOut_Click(object sender, EventArgs e)
+		private async void btnCheckOut_Click(object sender, EventArgs e)
 		{
 			Table table = lsvBill.Tag as Table;
-			int idBill = BillDAO.Instance.GetBillIDByTableID(table.ID);
+			int idBill = await BillDAO.Instance.GetBillIDByTableID(table.ID);
 			int discount = (int)nmDiscount.Value;
 
 			double totalPrice = Convert.ToDouble(txbTotalPrice.Text.Split(',')[0].Replace(".", ""));

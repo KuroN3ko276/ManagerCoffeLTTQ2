@@ -24,7 +24,7 @@ namespace ManageCafe.DAO
 
 		private BillDAO() { }
 
-		public int GetBillIDByTableID(int id)
+		public async Task<int> GetBillIDByTableID(int id)
 		{
 			Bill bill = new Bill();
 			var newBill = new
@@ -37,10 +37,10 @@ namespace ManageCafe.DAO
 			string apiUrl = "http://127.0.0.1:3333/bill/getnumbillbytableid";
 			HttpClient client = new HttpClient();
 			var content = new StringContent(jsonLogin, Encoding.UTF8, "application/json");
-			HttpResponseMessage response = client.PostAsync(apiUrl, content).Result;
+			HttpResponseMessage response = await client.PostAsync(apiUrl, content);
 			if (response.IsSuccessStatusCode)
 			{
-				string responseContent = response.Content.ReadAsStringAsync().Result;
+				string responseContent = await response.Content.ReadAsStringAsync();
 				bill = JsonConvert.DeserializeObject<Bill>(responseContent);
 				return bill.ID;
 			}
