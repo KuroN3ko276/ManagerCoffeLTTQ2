@@ -45,7 +45,7 @@ namespace ManageCafe.DTO
 
 		private DateTime? dateCheckOut;
 
-		private int status;
+		private int? status;
 
 		public int ID { get; set; }
 		public DateTime? DateCheckIn { get; set; }

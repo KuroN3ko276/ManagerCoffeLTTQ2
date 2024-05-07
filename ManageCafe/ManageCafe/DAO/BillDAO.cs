@@ -41,10 +41,16 @@ namespace ManageCafe.DAO
 			if (response.IsSuccessStatusCode)
 			{
 				string responseContent = await response.Content.ReadAsStringAsync();
-				bill = JsonConvert.DeserializeObject<Bill>(responseContent);
-				return bill.ID;
+				if (responseContent == "[]\n")
+				{
+					return -1;
+				}
+				else
+				{
+					bill = JsonConvert.DeserializeObject<Bill>(responseContent);
+				}
 			}
-			return -1;
+			return bill.ID;
 			//DataTable data = DataProvider.Instance.ExecuteQuery("SELECT * FROM dbo.Bill WHERE idTable = " + id + " AND status = 0");
 			//if(data.Rows.Count > 0) 
 			//{

@@ -169,6 +169,11 @@ namespace ManageCafe
 			exBook.Activate();
 			if (file.ShowDialog() == DialogResult.OK)
 				exBook.SaveAs(file.FileName.ToString());
+
+			BillDAO.Instance.CheckOut(idBill, discount, (float)finalTotalPrice);
+			showBill(table.ID);
+			LoadTable();
+
 			exApp.Quit();
 
 		}
@@ -283,10 +288,9 @@ namespace ManageCafe
 				if (MessageBox.Show(string.Format("Bạn có chắc thanh toán hóa đơn cho bàn {0}", table.Name), "Thông báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
 				{
 					ExportFileExcel();
-					BillDAO.Instance.CheckOut(idBill, discount, (float)finalTotalPrice);
-					showBill(table.ID);
-					LoadTable();
-
+					//BillDAO.Instance.CheckOut(idBill, discount, (float)finalTotalPrice);
+					//showBill(table.ID);
+					//LoadTable();
 				}
 			}
 
