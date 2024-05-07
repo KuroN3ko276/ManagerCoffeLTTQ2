@@ -71,14 +71,14 @@
             this.thôngTinTàiKhoảnToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(952, 28);
+			this.menuStrip1.Size = new System.Drawing.Size(952, 24);
 			this.menuStrip1.TabIndex = 0;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
 			// adminToolStripMenuItem
 			// 
 			this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
-			this.adminToolStripMenuItem.Size = new System.Drawing.Size(67, 24);
+			this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
 			this.adminToolStripMenuItem.Text = "Admin";
 			this.adminToolStripMenuItem.Click += new System.EventHandler(this.adminToolStripMenuItem_Click);
 			// 
@@ -88,20 +88,20 @@
             this.thôngTinCáNhânToolStripMenuItem,
             this.đăngXuấtToolStripMenuItem});
 			this.thôngTinTàiKhoảnToolStripMenuItem.Name = "thôngTinTàiKhoảnToolStripMenuItem";
-			this.thôngTinTàiKhoảnToolStripMenuItem.Size = new System.Drawing.Size(151, 24);
+			this.thôngTinTàiKhoảnToolStripMenuItem.Size = new System.Drawing.Size(122, 20);
 			this.thôngTinTàiKhoảnToolStripMenuItem.Text = "Thông tin tài khoản";
 			// 
 			// thôngTinCáNhânToolStripMenuItem
 			// 
 			this.thôngTinCáNhânToolStripMenuItem.Name = "thôngTinCáNhânToolStripMenuItem";
-			this.thôngTinCáNhânToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+			this.thôngTinCáNhânToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
 			this.thôngTinCáNhânToolStripMenuItem.Text = "Thông tin cá nhân";
 			this.thôngTinCáNhânToolStripMenuItem.Click += new System.EventHandler(this.thôngTinCáNhânToolStripMenuItem_Click);
 			// 
 			// đăngXuấtToolStripMenuItem
 			// 
 			this.đăngXuấtToolStripMenuItem.Name = "đăngXuấtToolStripMenuItem";
-			this.đăngXuấtToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+			this.đăngXuấtToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
 			this.đăngXuấtToolStripMenuItem.Text = "Đăng xuất";
 			this.đăngXuấtToolStripMenuItem.Click += new System.EventHandler(this.đăngXuấtToolStripMenuItem_Click);
 			// 
@@ -175,7 +175,7 @@
 			this.txbTotalPrice.Location = new System.Drawing.Point(257, 29);
 			this.txbTotalPrice.Name = "txbTotalPrice";
 			this.txbTotalPrice.ReadOnly = true;
-			this.txbTotalPrice.Size = new System.Drawing.Size(124, 28);
+			this.txbTotalPrice.Size = new System.Drawing.Size(124, 24);
 			this.txbTotalPrice.TabIndex = 7;
 			this.txbTotalPrice.Text = "0";
 			this.txbTotalPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -185,7 +185,7 @@
 			this.cbSwitchTable.FormattingEnabled = true;
 			this.cbSwitchTable.Location = new System.Drawing.Point(3, 49);
 			this.cbSwitchTable.Name = "cbSwitchTable";
-			this.cbSwitchTable.Size = new System.Drawing.Size(125, 27);
+			this.cbSwitchTable.Size = new System.Drawing.Size(125, 24);
 			this.cbSwitchTable.TabIndex = 2;
 			// 
 			// btnSwitchTable
@@ -202,12 +202,13 @@
 			// 
 			this.nmDiscount.Location = new System.Drawing.Point(134, 51);
 			this.nmDiscount.Name = "nmDiscount";
-			this.nmDiscount.Size = new System.Drawing.Size(117, 27);
+			this.nmDiscount.Size = new System.Drawing.Size(117, 23);
 			this.nmDiscount.TabIndex = 5;
 			this.nmDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// btnDiscount
 			// 
+			this.btnDiscount.Enabled = false;
 			this.btnDiscount.Location = new System.Drawing.Point(134, 4);
 			this.btnDiscount.Name = "btnDiscount";
 			this.btnDiscount.Size = new System.Drawing.Size(117, 40);
@@ -245,7 +246,7 @@
             0,
             -2147483648});
 			this.nmFoodCount.Name = "nmFoodCount";
-			this.nmFoodCount.Size = new System.Drawing.Size(54, 27);
+			this.nmFoodCount.Size = new System.Drawing.Size(54, 23);
 			this.nmFoodCount.TabIndex = 3;
 			this.nmFoodCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.nmFoodCount.Value = new decimal(new int[] {
@@ -269,7 +270,7 @@
 			this.cbFood.FormattingEnabled = true;
 			this.cbFood.Location = new System.Drawing.Point(3, 49);
 			this.cbFood.Name = "cbFood";
-			this.cbFood.Size = new System.Drawing.Size(232, 27);
+			this.cbFood.Size = new System.Drawing.Size(232, 24);
 			this.cbFood.TabIndex = 1;
 			// 
 			// cbCategory
@@ -277,7 +278,7 @@
 			this.cbCategory.FormattingEnabled = true;
 			this.cbCategory.Location = new System.Drawing.Point(3, 3);
 			this.cbCategory.Name = "cbCategory";
-			this.cbCategory.Size = new System.Drawing.Size(232, 27);
+			this.cbCategory.Size = new System.Drawing.Size(232, 24);
 			this.cbCategory.TabIndex = 0;
 			this.cbCategory.SelectedIndexChanged += new System.EventHandler(this.cbCategory_SelectedIndexChanged);
 			// 
@@ -291,7 +292,7 @@
 			// 
 			// fTableManage
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(952, 572);
 			this.Controls.Add(this.flpTable);

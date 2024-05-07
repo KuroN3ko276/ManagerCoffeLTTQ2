@@ -117,10 +117,10 @@ namespace ManageCafe
 			cb.DisplayMember = "Name";
 		}
 
-		async void ExportFileExcel()
+		void ExportFileExcel()
 		{
 			Table table = lsvBill.Tag as Table;
-			int idBill = await BillDAO.Instance.GetBillIDByTableID(table.ID);
+			int idBill = BillDAO.Instance.GetBillIDByTableID(table.ID);
 			int discount = (int)nmDiscount.Value;
 
 			double totalPrice = Convert.ToDouble(txbTotalPrice.Text.Split(',')[0].Replace(".", ""));
@@ -132,48 +132,55 @@ namespace ManageCafe
 			Excel.Worksheet exSheet = (Excel.Worksheet)exBook.Worksheets[1];
 			Excel.Range tenTruong = (Excel.Range)exSheet.Cells[1, 1]; //Đưa con trỏ vào ô A1
 																	  //Đưa dữ liệu vào file Excel
+			//string query = "select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice,TableFood.id as idtable from bill join BillInfo on bill.id=BillInfo.idBill join TableFood on TableFood.id=Bill.idTable join food on Food.id=BillInfo.idFood where tablefood.id=" + table.ID + " and Bill.status = 0";
+			HttpClient client = new HttpClient();
+			string queryString = $"bill/getbillforreceipt?idTable={table.ID}";
+			HttpResponseMessage response = client.GetAsync("http://127.0.0.1:3333/" + queryString).Result;
 
-			string query = "select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice,TableFood.id as idtable from bill join BillInfo on bill.id=BillInfo.idBill join TableFood on TableFood.id=Bill.idTable join food on Food.id=BillInfo.idFood where tablefood.id=" + table.ID + " and Bill.status = 0";
-			DataTable data = DataProvider.Instance.ExecuteQuery(query);
-			tenTruong.Range["A1:D1"].MergeCells = true;
-			tenTruong.Range["A1"].Value = "CẬU CHÍNH COFFEE";
-			tenTruong.Range["A2"].Value = "Địa chỉ: Cầu Giấy - Hà Nội";
-			tenTruong.Range["A3"].Value = "Điện thoại: 088888888";
-			tenTruong.Range["c5:f5"].MergeCells = true;
-			tenTruong.Range["C5:F5"].Font.Size = 18;
-			tenTruong.Range["C5:F5"].Font.Color = System.Drawing.Color.Red;
-			tenTruong.Range["C5"].Value = "HÓA ĐƠN BÁN";
-			tenTruong.Range["A7"].Value = "Mã HĐ: " + idBill;
-			tenTruong.Range["A8"].Value = "Tên bàn: " + table.Name;
-			tenTruong.Range["B10"].Value = "Mã Hàng ";
-			tenTruong.Range["C10"].Value = "Tên hàng ";
-			tenTruong.Range["D10"].Value = "Số lượng ";
-			tenTruong.Range["E10"].Value = "Đơn giá bán ";
-			tenTruong.Range["F10"].Value = "Thành tiền ";
-			int hang = 10;
-			for (int i = 0; i < data.Rows.Count; i++)
+			if (response.IsSuccessStatusCode)
 			{
-				hang++;
-				tenTruong.Range["A" + hang.ToString()].Value = (i + 1).ToString();
-				tenTruong.Range["B" + hang.ToString()].Value = data.Rows[i]["idfood"];
-				tenTruong.Range["C" + hang.ToString()].Value = data.Rows[i]["name"];
-				tenTruong.Range["D" + hang.ToString()].Value = data.Rows[i]["count"];
-				tenTruong.Range["E" + hang.ToString()].Value = data.Rows[i]["price"];
-				tenTruong.Range["F" + hang.ToString()].Value = data.Rows[i]["totalprice"];
+				string jsonResponse = response.Content.ReadAsStringAsync().Result;
+				DataTable data = JsonConvert.DeserializeObject<DataTable>(jsonResponse);
+				//DataTable data = DataProvider.Instance.ExecuteQuery(query);
+				tenTruong.Range["A1:D1"].MergeCells = true;
+				tenTruong.Range["A1"].Value = "CẬU CHÍNH COFFEE";
+				tenTruong.Range["A2"].Value = "Địa chỉ: Cầu Giấy - Hà Nội";
+				tenTruong.Range["A3"].Value = "Điện thoại: 088888888";
+				tenTruong.Range["c5:f5"].MergeCells = true;
+				tenTruong.Range["C5:F5"].Font.Size = 18;
+				tenTruong.Range["C5:F5"].Font.Color = System.Drawing.Color.Red;
+				tenTruong.Range["C5"].Value = "HÓA ĐƠN BÁN";
+				tenTruong.Range["A7"].Value = "Mã HĐ: " + idBill;
+				tenTruong.Range["A8"].Value = "Tên bàn: " + table.Name;
+				tenTruong.Range["B10"].Value = "Mã Hàng ";
+				tenTruong.Range["C10"].Value = "Tên hàng ";
+				tenTruong.Range["D10"].Value = "Số lượng ";
+				tenTruong.Range["E10"].Value = "Đơn giá bán ";
+				tenTruong.Range["F10"].Value = "Thành tiền ";
+				int hang = 10;
+				for (int i = 0; i < data.Rows.Count; i++)
+				{
+					hang++;
+					tenTruong.Range["A" + hang.ToString()].Value = (i + 1).ToString();
+					tenTruong.Range["B" + hang.ToString()].Value = data.Rows[i]["idfood"];
+					tenTruong.Range["C" + hang.ToString()].Value = data.Rows[i]["name"];
+					tenTruong.Range["D" + hang.ToString()].Value = data.Rows[i]["count"];
+					tenTruong.Range["E" + hang.ToString()].Value = data.Rows[i]["price"];
+					tenTruong.Range["F" + hang.ToString()].Value = data.Rows[i]["totalprice"];
 
+				}
+				tenTruong.Range["D" + (hang + 1).ToString()].Value = "Giảm giá: " + discount;
+				tenTruong.Range["C" + (hang + 2).ToString()].Value = "Tổng tiền: " + finalTotalPrice;
+
+				exSheet.Name = "HoaDonBan";
+				exBook.Activate();
+				if (file.ShowDialog() == DialogResult.OK)
+					exBook.SaveAs(file.FileName.ToString());
+
+				//BillDAO.Instance.CheckOut(idBill, discount, (float)finalTotalPrice);
+				//showBill(table.ID);
+				//LoadTable();
 			}
-			tenTruong.Range["D" + (hang + 1).ToString()].Value = "Giảm giá: " + discount;
-			tenTruong.Range["C" + (hang + 2).ToString()].Value = "Tổng tiền: " + finalTotalPrice;
-
-			exSheet.Name = "HoaDonBan";
-			exBook.Activate();
-			if (file.ShowDialog() == DialogResult.OK)
-				exBook.SaveAs(file.FileName.ToString());
-
-			BillDAO.Instance.CheckOut(idBill, discount, (float)finalTotalPrice);
-			showBill(table.ID);
-			LoadTable();
-
 			exApp.Quit();
 
 		}
@@ -210,37 +217,6 @@ namespace ManageCafe
 			fAdmin f = new fAdmin();
 			f.ShowDialog();
 		}
-
-		private void doanhThuToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Admin.fDoanhThu f = new Admin.fDoanhThu();
-			f.ShowDialog();
-		}
-
-		private void thứcĂnToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Admin.fFood f = new Admin.fFood();
-			f.ShowDialog();
-		}
-
-		private void danhMụcToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Admin.fDanhMuc f = new Admin.fDanhMuc();
-			f.ShowDialog();
-		}
-
-		private void bànĂnToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Admin.fBanAn f = new Admin.fBanAn();
-			f.ShowDialog();
-		}
-
-		private void tàiKhoảnToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Admin.fTaiKhoan f = new Admin.fTaiKhoan();
-			f.ShowDialog();
-		}
-
 		private void cbCategory_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			int id = 0;
@@ -254,45 +230,61 @@ namespace ManageCafe
 			LoadFoodListByCategoryID(id);
 		}
 
-		private async void btnAddFood_Click(object sender, EventArgs e)
+		private void btnAddFood_Click(object sender, EventArgs e)
 		{
 			Table table = lsvBill.Tag as Table;
-
-			int idBill = await BillDAO.Instance.GetBillIDByTableID(table.ID);
-			int foodID = (cbFood.SelectedItem as Food).ID;
-			int count = (int)nmFoodCount.Value;
-
-			if (idBill == -1)
+			if( table == null )
 			{
-				BillDAO.Instance.InsertBill(table.ID);
-				BillInfoDAO.Instance.InsertBillInfo(BillDAO.Instance.GetMaxIDBill(), foodID, count);
+				MessageBox.Show("Bạn chưa chọn bàn để thêm món");
+				return;
 			}
 			else
 			{
-				BillInfoDAO.Instance.InsertBillInfo(idBill, foodID, count);
-			}
-			showBill(table.ID);
-			LoadTable();
+				int idBill = BillDAO.Instance.GetBillIDByTableID(table.ID);
+				int foodID = (cbFood.SelectedItem as Food).ID;
+				int count = (int)nmFoodCount.Value;
+
+				if (idBill == -1)
+				{
+					BillDAO.Instance.InsertBill(table.ID);
+					BillInfoDAO.Instance.InsertBillInfo(BillDAO.Instance.GetMaxIDBill(), foodID, count);
+				}
+				else
+				{
+					BillInfoDAO.Instance.InsertBillInfo(idBill, foodID, count);
+				}
+				showBill(table.ID);
+				LoadTable();
+			}	
 		}
-		private async void btnCheckOut_Click(object sender, EventArgs e)
+		private void btnCheckOut_Click(object sender, EventArgs e)
 		{
 			Table table = lsvBill.Tag as Table;
-			int idBill = await BillDAO.Instance.GetBillIDByTableID(table.ID);
-			int discount = (int)nmDiscount.Value;
-
-			double totalPrice = Convert.ToDouble(txbTotalPrice.Text.Split(',')[0].Replace(".", ""));
-			double finalTotalPrice = totalPrice - (totalPrice / 100) * discount;
-
-			if (idBill != -1)
+			if( table == null )
 			{
-				if (MessageBox.Show(string.Format("Bạn có chắc thanh toán hóa đơn cho bàn {0}", table.Name), "Thông báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
+				MessageBox.Show("Chọn bàn cho Cậu CHÍNH");
+				return;
+			}
+			else
+			{
+				int idBill = BillDAO.Instance.GetBillIDByTableID(table.ID);
+				int discount = (int)nmDiscount.Value;
+
+				double totalPrice = Convert.ToDouble(txbTotalPrice.Text.Split(',')[0].Replace(".", ""));
+				double finalTotalPrice = totalPrice - (totalPrice / 100) * discount;
+
+				if (idBill != -1)
 				{
-					ExportFileExcel();
-					//BillDAO.Instance.CheckOut(idBill, discount, (float)finalTotalPrice);
-					//showBill(table.ID);
-					//LoadTable();
+					if (MessageBox.Show(string.Format("Bạn có chắc thanh toán hóa đơn cho bàn {0}", table.Name), "Thông báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
+					{
+						ExportFileExcel();
+						//BillDAO.Instance.CheckOut(idBill, discount, (float)finalTotalPrice);
+						//showBill(table.ID);
+						//LoadTable();
+					}
 				}
 			}
+			
 
 		}
 		private void btnSwitchTable_Click(object sender, EventArgs e)

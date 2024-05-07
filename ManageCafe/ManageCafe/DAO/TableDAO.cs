@@ -54,7 +54,29 @@ namespace ManageCafe.DAO
 
 		public void SwitchTable(int id1, int id2)
 		{
-			DataProvider.Instance.ExecuteQuery("exec USP_SwitchTabel @idTable1 , @idTable2", new object[] { id1, id2 });
+			//DataProvider.Instance.ExecuteQuery("exec USP_SwitchTabel @idTable1 , @idTable2", new object[] { id1, id2 });
+			HttpClient client = new HttpClient();
+			//DataProvider.Instance.ExecuteNonQuery("exec USP_InsertBillInfo @idBill , @idFood , @count ", new object[] {idBill,idFood,count });
+			var switchTable = new
+			{
+				idTable1 = id1,
+				idTable2 = id2
+			};
+
+			// Chuyển đối tượng food thành chuỗi JSON
+			string jsonFood = JsonConvert.SerializeObject(switchTable);
+
+			// Tạo đường dẫn API và HttpClient
+			string apiUrl = "http://127.0.0.1:3333/table/switchtable";
+
+			// Tạo nội dung yêu cầu POST với dữ liệu JSON
+			var content = new StringContent(jsonFood, Encoding.UTF8, "application/json");
+
+			// Gửi yêu cầu POST đến API
+			HttpResponseMessage response = client.PutAsync(apiUrl, content).Result;
+
+			// Đọc nội dung phản hồi từ máy chủ Python
+			string responseContent = response.Content.ReadAsStringAsync().Result;
 		}
 
 	}

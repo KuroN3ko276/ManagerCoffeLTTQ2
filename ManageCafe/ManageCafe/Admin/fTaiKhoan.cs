@@ -16,16 +16,16 @@ namespace ManageCafe.Admin
         public fTaiKhoan()
         {
             InitializeComponent();
-			LoadAccountList();
+			//LoadAccountList();
         }
 
-		void LoadAccountList()
-		{
-			string query = "EXEC dbo.USP_GetAccountByUserName @userName";
+		//void LoadAccountList()
+		//{
+		//	string query = "EXEC dbo.USP_GetAccountByUserName @userName";
 
 
-			dtgvAccount.DataSource = DataProvider.Instance.ExecuteQuery(query, new object[] { "staff" });
+		//	dtgvAccount.DataSource = DataProvider.Instance.ExecuteQuery(query, new object[] { "staff" });
 
-		}
+		//}
 	}
 }

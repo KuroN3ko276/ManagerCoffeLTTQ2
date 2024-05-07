@@ -1,5 +1,4 @@
-﻿using ManageCafe.Admin;
-using ManageCafe.DAO;
+﻿using ManageCafe.DAO;
 using ManageCafe.DTO;
 using Newtonsoft.Json;
 using System;
@@ -25,7 +24,7 @@ namespace ManageCafe
 		private static readonly string getAllFood = "http://127.0.0.1:3333/food/getAllFood";
 		private static readonly string getAllTable = "http://127.0.0.1:3333/table/gettablelist";
 		private static readonly string getAllCategory = "http://127.0.0.1:3333/category/getlistcategory";
-		private static readonly string getAllBill = "http://127.0.0.1:3333/bill/getbillbydate";
+		//private static readonly string getAllBill = "http://127.0.0.1:3333/bill/getbillbydate";
 		private static readonly string getAllAccount = "http://127.0.0.1:3333/account/getAllAccount";
 		public fAdmin()
 		{
@@ -34,7 +33,7 @@ namespace ManageCafe
 			LoadBillListAsync(dtpkFromDate.Value.ToString("yyyy/MM/dd"), dtpkToDate.Value.ToString("yyyy/MM/dd"));
 			LoadCategoryList();
 			LoadFoodList();
-			FillCategoryIntoCombobox();
+			//FillCategoryIntoCombobox();
 			LoadTableFoodList();
 			LoadAccountList();
 		}
@@ -54,7 +53,7 @@ namespace ManageCafe
 			if (response.IsSuccessStatusCode)
 			{
 				string jsonResponse = await response.Content.ReadAsStringAsync();
-				var billList = JsonConvert.DeserializeObject<List<DTO.Bill>>(jsonResponse);
+				var billList = JsonConvert.DeserializeObject<List<Object>>(jsonResponse);
 				dtgvBill.DataSource = billList;
 			}
 		}
@@ -68,14 +67,27 @@ namespace ManageCafe
 				var content = await response.Content.ReadAsStringAsync();
 				var categoryList = JsonConvert.DeserializeObject<List<Category>>(content);
 				dtgvCategory.DataSource = categoryList;
+				cbFoodCategory.DataSource = categoryList;
+				cbFoodCategory.DisplayMember = "Name";
+				cbFoodCategory.ValueMember = "ID";
 			}
 		}
 
-		void FillCategoryIntoCombobox()
-		{
-			DataTable dtCategory = DataProvider.Instance.ExecuteQuery("select * from FoodCategory");
-			FillComBoBox(cbFoodCategory, dtCategory, "Name", "ID");
-		}
+		//void FillCategoryIntoCombobox()
+		//{
+		//	//DataTable dtCategory = DataProvider.Instance.ExecuteQuery("select * from FoodCategory");
+		//	//FillComBoBox(cbFoodCategory, dtCategory, "Name", "ID");
+		//	HttpResponseMessage response = client.GetAsync(getAllCategory).Result;
+
+		//	if (response.IsSuccessStatusCode)
+		//	{
+		//		var content = response.Content.ReadAsStringAsync().Result;
+		//		List<Category> dtCategory = JsonConvert.DeserializeObject<List<Category>>(content);
+		//		cbFoodCategory.DataSource = dtCategory;
+		//		cbFoodCategory.DisplayMember = "Name";
+		//		cbFoodCategory.ValueMember = "ID";
+		//	}
+		//}
 
 		async Task LoadFoodList()
 		{
@@ -101,24 +113,24 @@ namespace ManageCafe
 			}
 		}
 
-		async Task LoadAccountList()
+		void LoadAccountList()
 		{
-			HttpResponseMessage response = await client.GetAsync(getAllAccount);
+			HttpResponseMessage response = client.GetAsync(getAllAccount).Result;
 
 			if (response.IsSuccessStatusCode)
 			{
-				var content = await response.Content.ReadAsStringAsync();
+				var content = response.Content.ReadAsStringAsync().Result;
 				var accountList = JsonConvert.DeserializeObject<List<Account>>(content);
 				dtgvAccount.DataSource = accountList;
 			}
 		}
 
-		void FillComBoBox(ComboBox cbname, DataTable data, string displayMember, string valueMember)
-		{
-			cbname.DataSource = data;
-			cbname.DisplayMember = displayMember;
-			cbname.ValueMember = valueMember;
-		}
+		//void FillComBoBox(ComboBox cbname, DataTable data, string displayMember, string valueMember)
+		//{
+		//	cbname.DataSource = data;
+		//	cbname.DisplayMember = displayMember;
+		//	cbname.ValueMember = valueMember;
+		//}
 		#endregion
 
 		#region events
@@ -176,7 +188,7 @@ namespace ManageCafe
 					{
 						MessageBox.Show("Thêm category thành công");
 						LoadCategoryList();
-						FillCategoryIntoCombobox();
+						//FillCategoryIntoCombobox();
 					}
 					else if (message == "Đã có category này")
 					{
@@ -237,7 +249,7 @@ namespace ManageCafe
 						{
 							MessageBox.Show("Sửa danh mục thành công");
 							LoadCategoryList(); // Load lại danh sách danh mục sau khi chỉnh sửa thành công
-							FillCategoryIntoCombobox();
+							//FillCategoryIntoCombobox();
 						}
 						else if (message == "Đã có danh mục này")
 						{
@@ -285,7 +297,7 @@ namespace ManageCafe
 							{
 								MessageBox.Show("Xoá danh mục thành công");
 								LoadCategoryList(); // Load lại danh sách danh mục sau khi chỉnh sửa thành công
-								FillCategoryIntoCombobox();
+								//FillCategoryIntoCombobox();
 							}
 							else if (message == "Danh mục này đã có món")
 							{
@@ -335,6 +347,7 @@ namespace ManageCafe
 		private void btnShowFood_Click(object sender, EventArgs e)
 		{
 			LoadFoodList();
+			LoadCategoryList();
 
 		}
 		private void dtgvFood_CellClick(object sender, DataGridViewCellEventArgs e)

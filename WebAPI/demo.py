@@ -485,9 +485,9 @@ try:
             sql = "SELECT MAX(id) FROM dbo.Bill"
             cursor.execute(sql)
             max_id = cursor.fetchone()[0]
-            resp = flask.jsonify({"max_id": max_id})
-            resp.status_code = 200
-            return resp
+            #resp = flask.jsonify({"max_id": max_id})
+            #resp.status_code = 200
+            return str(max_id),200
         except Exception as e:
             return flask.jsonify({"mess": str(e)})
     
@@ -637,6 +637,25 @@ try:
         except Exception as e:
             return flask.jsonify({"mess": str(e)})
     
+    #GetBillForReceipt
+    @app.route('/bill/getbillforreceipt', methods=['GET'])
+    def getBillForReceipt():
+        try:
+            idTable = flask.request.args.get('idTable')
+            cursor = conn.cursor()
+            sql = "select Food.id as idfood,Food.name,count,Food.price,(count * price) as totalPrice,TableFood.id as idtable from bill join BillInfo on bill.id=BillInfo.idBill join TableFood on TableFood.id=Bill.idTable join food on Food.id=BillInfo.idFood where tablefood.id= ? and Bill.status = 0"
+            data = (idTable,)
+            cursor.execute(sql, data)
+            results = []
+            keys = [i[0] for i in cursor.description]
+            for row in cursor.fetchall():
+                results.append(dict(zip(keys, row)))
+            resp = flask.jsonify(results)
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return flask.jsonify({"mess": str(e)})   
+        
     #GetFoodByCategoryID
     @app.route('/food/getlistfoodbycategory', methods=['GET'])
     def getListFoodByCategory():
